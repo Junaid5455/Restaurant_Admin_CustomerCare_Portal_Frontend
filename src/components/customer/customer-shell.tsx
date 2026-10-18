@@ -22,7 +22,7 @@ const NAV = [
     label: 'Orders',
     items: [
       { href: '/customer/cart', icon: '🛒', text: 'Cart', ready: true },
-      { href: '/customer/orders', icon: '📋', text: 'My orders', ready: false },
+      { href: '/customer/orders', icon: '📋', text: 'My orders', ready: true },
       { href: '/customer/reservations', icon: '📅', text: 'Reservations', ready: false },
     ],
   },
@@ -41,6 +41,9 @@ const CART_HREF = '/customer/cart';
 const CART_READY = true;
 
 function titleFor(pathname: string) {
+  if (/^\/customer\/orders\/.+\/track/.test(pathname)) return 'Track order';
+  if (/^\/customer\/orders\/.+/.test(pathname)) return 'Order details';
+  if (pathname.startsWith('/customer/orders')) return 'My orders';
   if (pathname.startsWith('/customer/cart')) return 'Your cart';
   if (pathname.startsWith('/customer/checkout/confirmation')) return 'Order confirmation';
   if (pathname.startsWith('/customer/checkout/payment')) return 'Payment';

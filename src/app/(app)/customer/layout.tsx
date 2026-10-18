@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import './customer.css';
 import './checkout.css';
+import './orders.css';
 import { CustomerShell } from '@/components/customer/customer-shell';
 import { ToastProvider } from '@/components/ui/toast';
 

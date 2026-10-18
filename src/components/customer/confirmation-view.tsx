@@ -7,32 +7,12 @@ import { CheckoutSteps } from './checkout-steps';
 import { lineDetails } from './cart-line';
 import { OrderDetails } from './order-details';
 import { OrderSummary } from './order-summary';
-import { Alert } from '@/components/ui/alert';
-import { ordersApi, type OrderStatus } from '@/lib/api/orders';
+import { ordersApi } from '@/lib/api/orders';
 import { getSnapshot, type CheckoutSnapshot } from '@/lib/checkout-session';
 import { parseError } from '@/lib/errors';
 import { formatMoney } from '@/lib/format';
 import { formatDateTime } from '@/lib/pickup';
-
-const TERMINAL: OrderStatus[] = ['DELIVERED', 'CANCELLED', 'REFUNDED'];
-
-const STATUS_LABEL: Record<OrderStatus, string> = {
-  PLACED: 'Order placed',
-  CONFIRMED: 'Confirmed',
-  PREPARING: 'Preparing',
-  READY: 'Ready',
-  OUT_FOR_DELIVERY: 'Out for delivery',
-  DELIVERED: 'Delivered',
-  CANCELLED: 'Cancelled',
-  REFUNDED: 'Refunded',
-};
-
-/** The happy-path stages for each order type, in order. */
-function stages(type: string): OrderStatus[] {
-  return type === 'DELIVERY'
-    ? ['PLACED', 'CONFIRMED', 'PREPARING', 'OUT_FOR_DELIVERY', 'DELIVERED']
-    : ['PLACED', 'CONFIRMED', 'PREPARING', 'READY', 'DELIVERED'];
-}
+import { STATUS_LABEL, TERMINAL, stages } from '@/lib/order-status';
 
 export function ConfirmationView({ orderId }: { orderId: string }) {
   const order = useQuery({
@@ -63,7 +43,7 @@ export function ConfirmationView({ orderId }: { orderId: string }) {
       </div>
     );
   }
-  if (order.isError) {
+  if (!order.data) {
     const err = parseError(order.error);
     return (
       <div className="sv-state">
@@ -154,8 +134,11 @@ export function ConfirmationView({ orderId }: { orderId: string }) {
 
         <aside className="sv-cart-aside">
           <OrderSummary subtotal={o.subtotal} tax={o.tax_amount} deliveryFee={o.delivery_fee} total={o.total_amount} title="Payment summary" />
-          <Alert kind="info">Order history and live tracking arrive in the next step. Keep this order number handy: <strong>#{o.order_number}</strong>.</Alert>
-          <Link href="/customer/restaurants" className="btn btn-primary btn-block">Order something else</Link>
+          {!cancelled && !unpaid && o.status !== 'DELIVERED' ? (
+            <Link href={`/customer/orders/${o.id}/track`} className="btn btn-primary btn-block">Track this order</Link>
+          ) : null}
+          <Link href={`/customer/orders/${o.id}`} className="btn btn-ghost btn-block">View order details</Link>
+          <Link href="/customer/restaurants" className="btn btn-ghost btn-block">Order something else</Link>
           {o.restaurant && (
             <Link href={`/customer/restaurants/${o.restaurant}`} className="btn btn-ghost btn-block">Back to {o.restaurant_name}</Link>
           )}
