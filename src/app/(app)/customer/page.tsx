@@ -1,5 +1,6 @@
-import { RoleHome } from '@/components/role-home';
+import { redirect } from 'next/navigation';
 
-export default function Page() {
-  return <RoleHome title="Customer home" />;
+// The customer home is restaurant discovery.
+export default function CustomerHome() {
+  redirect('/customer/restaurants');
 }
