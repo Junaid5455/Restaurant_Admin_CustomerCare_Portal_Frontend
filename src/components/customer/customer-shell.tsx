@@ -21,7 +21,7 @@ const NAV = [
   {
     label: 'Orders',
     items: [
-      { href: '/customer/cart', icon: '🛒', text: 'Cart', ready: false },
+      { href: '/customer/cart', icon: '🛒', text: 'Cart', ready: true },
       { href: '/customer/orders', icon: '📋', text: 'My orders', ready: false },
       { href: '/customer/reservations', icon: '📅', text: 'Reservations', ready: false },
     ],
@@ -38,9 +38,13 @@ const NAV = [
 ];
 
 const CART_HREF = '/customer/cart';
-const CART_READY = false;
+const CART_READY = true;
 
 function titleFor(pathname: string) {
+  if (pathname.startsWith('/customer/cart')) return 'Your cart';
+  if (pathname.startsWith('/customer/checkout/confirmation')) return 'Order confirmation';
+  if (pathname.startsWith('/customer/checkout/payment')) return 'Payment';
+  if (pathname.startsWith('/customer/checkout')) return 'Checkout';
   if (/^\/customer\/restaurants\/.+/.test(pathname)) return 'Restaurant';
   if (pathname.startsWith('/customer/restaurants')) return 'Discover restaurants';
   return 'Savoria';
@@ -79,7 +83,10 @@ export function CustomerShell({ children }: { children: ReactNode }) {
           <div className="sv-nav-section" key={section.label}>
             <div className="sv-nav-label">{section.label}</div>
             {section.items.map((item) => {
-              const active = pathname === item.href || pathname.startsWith(item.href + '/');
+              const active =
+                pathname === item.href ||
+                pathname.startsWith(item.href + '/') ||
+                (item.href === CART_HREF && pathname.startsWith('/customer/checkout'));
               return item.ready ? (
                 <Link
                   key={item.href}
