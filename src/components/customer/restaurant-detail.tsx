@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { RestaurantHeart } from './favorite-button';
 import { ItemModal } from './item-modal';
 import { MenuBrowser } from './menu-browser';
 import { RestaurantRating } from './restaurant-card';
@@ -91,9 +92,12 @@ export function RestaurantDetail({ id }: { id: string }) {
               <SafeImage src={r.logo} alt={`${r.name} logo`} fallback={<span aria-hidden="true">{initials(r.name) || '🍽'}</span>} />
             </div>
             <div style={{ flex: 1, minWidth: 220, paddingBottom: 4 }}>
-              <h1 id="restaurant-name" className="sv-hero-title">
-                {r.name}
-              </h1>
+              <div className="sv-hero-titlerow">
+                <h1 id="restaurant-name" className="sv-hero-title">
+                  {r.name}
+                </h1>
+                <RestaurantHeart restaurantId={r.id} name={r.name} variant="pill" />
+              </div>
               <div className="sv-meta" style={{ marginTop: 6 }}>
                 <span className={`badge ${open ? 'badge-good' : 'badge-crit'}`}>{open ? '● Open now' : '● Closed'}</span>
                 <RestaurantRating rating={r.rating} reviews={r.review_count} />

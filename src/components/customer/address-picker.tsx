@@ -20,7 +20,7 @@ export function formatAddress(a: Pick<SavedAddress, 'address' | 'city' | 'state'
 
 /* ───────────── Add / edit form ───────────── */
 
-function AddressFormModal({
+export function AddressFormModal({
   initial,
   isFirst,
   onClose,

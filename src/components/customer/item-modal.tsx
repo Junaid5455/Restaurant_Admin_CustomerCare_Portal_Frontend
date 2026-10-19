@@ -1,6 +1,7 @@
 'use client';
 
 import { useId, useMemo, useState } from 'react';
+import { ItemHeart } from './favorite-button';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Alert } from '@/components/ui/alert';
 import { Modal } from '@/components/ui/modal';
@@ -23,7 +24,8 @@ export function ItemModal({
   onClose,
 }: {
   item: MenuItem;
-  restaurant: { id: string; name: string };
+  /** null when the dish is opened from Favorites: the API doesn't say which restaurant a favourite dish belongs to. */
+  restaurant: { id: string; name: string } | null;
   onClose: () => void;
 }) {
   const titleId = useId();
@@ -117,7 +119,7 @@ export function ItemModal({
 
     // One restaurant per cart. Check up front so we can offer to start a new cart.
     const c = cart.data;
-    const otherRestaurant = !!c && c.items.length > 0 && !!c.restaurant && c.restaurant !== restaurant.id;
+    const otherRestaurant = !!c && c.items.length > 0 && !!restaurant && !!c.restaurant && c.restaurant !== restaurant.id;
     if (otherRestaurant && !replaceCart) {
       setConflict(true);
       return;
@@ -155,6 +157,7 @@ export function ItemModal({
       <Modal onClose={onClose} labelledBy={titleId}>
         <div className="sv-modal-scroll">
           <div className="sv-modal-hero">
+            <ItemHeart itemId={item.id} name={item.name} className="sv-heart-float sv-heart-modal" />
             <button type="button" className="icon-btn sv-modal-close" onClick={onClose} aria-label="Close">
               ✕
             </button>
@@ -308,7 +311,7 @@ export function ItemModal({
         <ConflictDialog
           currentName={cartRestaurantName}
           lines={cartLines}
-          nextName={restaurant.name}
+          nextName={restaurant?.name ?? 'this restaurant'}
           busy={busy}
           onKeep={() => setConflict(false)}
           onReplace={() => submit(true)}

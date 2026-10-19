@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Suspense, useEffect, useState, type ReactNode } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { SearchBox } from './search-box';
+import { SafeImage } from '@/components/ui/safe-image';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { useToast } from '@/components/ui/toast';
 import { useAuth } from '@/context/auth-context';
@@ -29,10 +30,12 @@ const NAV = [
   {
     label: 'Account',
     items: [
-      { href: '/customer/favorites', icon: '❤️', text: 'Favorites', ready: false },
-      { href: '/customer/rewards', icon: '🎁', text: 'Rewards', ready: false },
+      { href: '/customer/profile', icon: '👤', text: 'Profile', ready: true },
+      { href: '/customer/addresses', icon: '📍', text: 'Addresses', ready: true },
+      { href: '/customer/payment-methods', icon: '💳', text: 'Payment methods', ready: true },
+      { href: '/customer/favorites', icon: '❤️', text: 'Favorites', ready: true },
+      { href: '/customer/rewards', icon: '🎁', text: 'Rewards', ready: true },
       { href: '/customer/support', icon: '🎫', text: 'Support', ready: false },
-      { href: '/customer/profile', icon: '👤', text: 'Profile', ready: false },
     ],
   },
 ];
@@ -44,6 +47,11 @@ function titleFor(pathname: string) {
   if (/^\/customer\/orders\/.+\/track/.test(pathname)) return 'Track order';
   if (/^\/customer\/orders\/.+/.test(pathname)) return 'Order details';
   if (pathname.startsWith('/customer/orders')) return 'My orders';
+  if (pathname.startsWith('/customer/profile')) return 'Profile';
+  if (pathname.startsWith('/customer/addresses')) return 'Saved addresses';
+  if (pathname.startsWith('/customer/payment-methods')) return 'Payment methods';
+  if (pathname.startsWith('/customer/favorites')) return 'Favorites';
+  if (pathname.startsWith('/customer/rewards')) return 'Rewards';
   if (pathname.startsWith('/customer/cart')) return 'Your cart';
   if (pathname.startsWith('/customer/checkout/confirmation')) return 'Order confirmation';
   if (pathname.startsWith('/customer/checkout/payment')) return 'Payment';
@@ -113,7 +121,9 @@ export function CustomerShell({ children }: { children: ReactNode }) {
 
         <div className="sv-sidebar-footer">
           <div className="sv-user-pill">
-            <div className="sv-avatar" aria-hidden="true">{initials(displayName) || '?'}</div>
+            <div className="sv-avatar" aria-hidden="true">
+              <SafeImage src={user?.profile_picture} alt="" fallback={<>{initials(displayName) || '?'}</>} />
+            </div>
             <div className="sv-user-text">
               <div className="sv-user-name">{displayName}</div>
               <div className="sv-user-role">{user ? ROLE_LABEL[user.role] : ''}</div>
