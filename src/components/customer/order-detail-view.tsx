@@ -9,6 +9,8 @@ import { OrderDetails } from './order-details';
 import { OrderSummary } from './order-summary';
 import { ReorderButton } from './reorder-button';
 import { StatusProgress } from './status-progress';
+import { useTickets } from '@/hooks/use-tickets';
+import { TICKET_STATUS_LABEL, ticketBadgeClass } from '@/lib/api/support';
 import { ordersApi } from '@/lib/api/orders';
 import { getSnapshot, type CheckoutSnapshot } from '@/lib/checkout-session';
 import { parseError } from '@/lib/errors';
@@ -23,6 +25,8 @@ export function OrderDetailView({ orderId }: { orderId: string }) {
     refetchInterval: (q) => (q.state.data && !isFinished(q.state.data.status) ? 20_000 : false),
   });
 
+  // Tickets already opened for this order (silent if the list can't load).
+  const tickets = useTickets();
   const [snapshot, setSnapshot] = useState<CheckoutSnapshot | null>(null);
   useEffect(() => setSnapshot(getSnapshot(orderId)), [orderId]);
 
@@ -119,6 +123,25 @@ export function OrderDetailView({ orderId }: { orderId: string }) {
           )}
           <ReorderButton order={o} className={`btn btn-block ${finished ? 'btn-primary' : 'btn-ghost'}`} />
           {canCancel(o.status) && <CancelOrderButton orderId={o.id} className="btn btn-ghost btn-block" />}
+
+          <div className="sv-report">
+            <Link href={`/customer/support/new?order=${o.id}`} className="btn btn-ghost btn-block">⚠️ Report a problem</Link>
+            {(tickets.data?.tickets ?? []).filter((tk) => tk.related_order === o.id).length > 0 && (
+              <div className="sv-report-list">
+                <p className="sv-acct-note">Tickets for this order</p>
+                <ul>
+                  {(tickets.data?.tickets ?? []).filter((tk) => tk.related_order === o.id).slice(0, 3).map((tk) => (
+                    <li key={tk.id}>
+                      <Link href={`/customer/support/${tk.id}`}>
+                        <span>{tk.subject}</span>
+                        <span className={`badge ${ticketBadgeClass(tk.status)}`}>{TICKET_STATUS_LABEL[tk.status]}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
         </aside>
       </div>
     </div>

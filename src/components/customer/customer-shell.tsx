@@ -35,7 +35,7 @@ const NAV = [
       { href: '/customer/payment-methods', icon: '💳', text: 'Payment methods', ready: true },
       { href: '/customer/favorites', icon: '❤️', text: 'Favorites', ready: true },
       { href: '/customer/rewards', icon: '🎁', text: 'Rewards', ready: true },
-      { href: '/customer/support', icon: '🎫', text: 'Support', ready: false },
+      { href: '/customer/support', icon: '🎫', text: 'Support', ready: true },
     ],
   },
 ];
@@ -47,6 +47,9 @@ function titleFor(pathname: string) {
   if (/^\/customer\/orders\/.+\/track/.test(pathname)) return 'Track order';
   if (/^\/customer\/orders\/.+/.test(pathname)) return 'Order details';
   if (pathname.startsWith('/customer/orders')) return 'My orders';
+  if (pathname === '/customer/support/new') return 'New ticket';
+  if (/^\/customer\/support\/.+/.test(pathname)) return 'Support ticket';
+  if (pathname.startsWith('/customer/support')) return 'Support';
   if (pathname.startsWith('/customer/profile')) return 'Profile';
   if (pathname.startsWith('/customer/addresses')) return 'Saved addresses';
   if (pathname.startsWith('/customer/payment-methods')) return 'Payment methods';
