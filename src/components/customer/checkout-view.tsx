@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/submit-button';
 import { TextField } from '@/components/ui/text-field';
 import { CART_KEY, useCart } from '@/hooks/use-cart';
 import { addressesApi } from '@/lib/api/addresses';
+import { readAppPrefs } from '@/lib/app-prefs';
 import { cartApi, type Cart, type CheckoutInput, type OrderType } from '@/lib/api/cart';
 import { restaurantsApi, type RestaurantDetail } from '@/lib/api/restaurants';
 import { saveSnapshot } from '@/lib/checkout-session';
@@ -50,7 +51,7 @@ export function CheckoutView() {
   });
   const addresses = useQuery({ queryKey: ADDRESSES_KEY, queryFn: addressesApi.list });
 
-  const [chosenType, setChosenType] = useState<OrderType | null>(null);
+  const [chosenType, setChosenType] = useState<OrderType | null>(() => readAppPrefs().orderType);
   const [addressId, setAddressId] = useState<string | null>(null);
   const [instructions, setInstructions] = useState('');
   const [slotValue, setSlotValue] = useState('');

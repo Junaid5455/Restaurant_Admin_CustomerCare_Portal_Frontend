@@ -36,6 +36,7 @@ const NAV = [
       { href: '/customer/favorites', icon: '❤️', text: 'Favorites', ready: true },
       { href: '/customer/rewards', icon: '🎁', text: 'Rewards', ready: true },
       { href: '/customer/support', icon: '🎫', text: 'Support', ready: true },
+      { href: '/customer/settings', icon: '⚙️', text: 'Settings', ready: true },
     ],
   },
 ];
@@ -47,6 +48,7 @@ function titleFor(pathname: string) {
   if (/^\/customer\/orders\/.+\/track/.test(pathname)) return 'Track order';
   if (/^\/customer\/orders\/.+/.test(pathname)) return 'Order details';
   if (pathname.startsWith('/customer/orders')) return 'My orders';
+  if (pathname.startsWith('/customer/settings')) return 'Settings';
   if (pathname === '/customer/support/new') return 'New ticket';
   if (/^\/customer\/support\/.+/.test(pathname)) return 'Support ticket';
   if (pathname.startsWith('/customer/support')) return 'Support';

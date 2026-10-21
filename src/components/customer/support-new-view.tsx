@@ -36,8 +36,8 @@ export function SupportNewView() {
     CATEGORIES.includes(catParam as TicketCategory) ? (catParam as TicketCategory) : orderParam ? 'ORDER_ISSUE' : '',
   );
   const [orderId, setOrderId] = useState(orderParam ?? '');
-  const [subject, setSubject] = useState('');
-  const [description, setDescription] = useState('');
+  const [subject, setSubject] = useState((params.get('subject') ?? '').slice(0, 200));
+  const [description, setDescription] = useState((params.get('message') ?? '').slice(0, DESC_MAX));
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);

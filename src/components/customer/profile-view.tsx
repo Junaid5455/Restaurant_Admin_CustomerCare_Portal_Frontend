@@ -174,7 +174,7 @@ function DetailsCard({ user }: { user: User }) {
 
 const EMPTY_PW = { old: '', next: '', confirm: '' };
 
-function PasswordCard() {
+export function PasswordCard() {
   const { push } = useToast();
   const [values, setValues] = useState(EMPTY_PW);
   const [errors, setErrors] = useState<Record<string, string>>({});
