@@ -1,3 +1,4 @@
+import { loginPathFor } from './roles';
 import axios, { type AxiosRequestConfig, type InternalAxiosRequestConfig } from 'axios';
 import { API_URL } from './constants';
 import { clearAuthCookies, getAccessToken, getRefreshToken, setTokens } from './cookies';
@@ -55,8 +56,8 @@ export async function ensureAccessToken(): Promise<string | null> {
 
 function endSession() {
   clearAuthCookies();
-  if (typeof window !== 'undefined' && !/^\/(login|register|forgot-password|reset-password|verify-email)/.test(window.location.pathname)) {
-    window.location.assign('/login?expired=1');
+  if (typeof window !== 'undefined' && !/^\/(login|register|forgot-password|reset-password|verify-email|owner\/login)/.test(window.location.pathname)) {
+    window.location.assign(`${loginPathFor(window.location.pathname)}?expired=1`);
   }
 }
 

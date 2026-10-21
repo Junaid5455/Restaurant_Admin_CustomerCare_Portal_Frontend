@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { COOKIE_REFRESH, COOKIE_ROLE } from '@/lib/constants';
-import { PROTECTED_PREFIXES, ROLE_HOME, isRole } from '@/lib/roles';
+import { ADMIN_LOGIN, PROTECTED_PREFIXES, ROLE_HOME, isRole, loginPathFor } from '@/lib/roles';
 
 /**
  * Routes users before render. This is a UX layer only: the role cookie is client-written,
@@ -21,9 +21,15 @@ export function middleware(req: NextRequest) {
     return hasSession && home ? go(home) : NextResponse.next();
   }
 
+  // Restaurant-team sign-in: open to everyone, but it sends signed-in team members straight to their own area.
+  // A signed-in customer may still open it (to switch to a team account).
+  if (pathname === ADMIN_LOGIN) {
+    return hasSession && home && roleValue !== 'CUSTOMER' ? go(home) : NextResponse.next();
+  }
+
   const area = PROTECTED_PREFIXES.find((p) => pathname === p || pathname.startsWith(p + '/'));
   if (area) {
-    if (!hasSession) return go(`/login?next=${encodeURIComponent(pathname)}`);
+    if (!hasSession) return go(`${loginPathFor(pathname)}?next=${encodeURIComponent(pathname)}`);
     if (home && area !== home) return go(home);
   }
 

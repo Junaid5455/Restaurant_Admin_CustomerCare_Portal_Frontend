@@ -1,5 +1,8 @@
-import { RoleHome } from '@/components/role-home';
+import type { Metadata } from 'next';
+import { DashboardView } from '@/components/admin/dashboard-view';
 
-export default function Page() {
-  return <RoleHome title="Owner dashboard" />;
+export const metadata: Metadata = { title: 'Dashboard' };
+
+export default function OwnerDashboardPage() {
+  return <DashboardView />;
 }

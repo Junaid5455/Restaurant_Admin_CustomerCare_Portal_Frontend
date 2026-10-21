@@ -83,6 +83,12 @@ function LoginForm() {
             Create an account
           </Link>
         </p>
+        <p style={{ textAlign: 'center', color: 'var(--fg-3)', fontSize: 13, marginTop: -6 }}>
+          Run a restaurant?{' '}
+          <Link href="/owner/login" className="link">
+            Team sign-in
+          </Link>
+        </p>
       </form>
     </AuthShell>
   );

@@ -19,6 +19,14 @@ export const ROLE_LABEL: Record<Role, string> = {
 
 export const PROTECTED_PREFIXES = Object.values(ROLE_HOME);
 
+/** Dedicated sign-in for the restaurant team. Lives inside /owner but is the one page there that needs no session. */
+export const ADMIN_LOGIN = '/owner/login';
+
+/** Where to send someone who isn't signed in, depending on the area they tried to open. */
+export function loginPathFor(pathname: string): string {
+  return pathname === '/owner' || pathname.startsWith('/owner/') ? ADMIN_LOGIN : '/login';
+}
+
 export function isRole(value: string | undefined | null): value is Role {
   return !!value && value in ROLE_HOME;
 }
