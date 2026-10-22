@@ -538,3 +538,67 @@ div.sv-setting-label { cursor: default; }
 
 @media (max-width: 720px) { .ad-two, .ad-three { grid-template-columns: minmax(0, 1fr); } .ad-zones li { flex-direction: column; } .ad-image-preview.wide { width: 100%; max-width: 280px; } }
 @media (prefers-reduced-motion: reduce) { .sv-switch-track, .sv-switch-thumb { transition: none; } }
+
+/* ── 7.3 Orders, order detail and refunds ── */
+.ad-btn-sm { padding: 6px 12px; font-size: 12.5px; border-radius: 10px; white-space: nowrap; }
+.ad-rowlink { color: var(--fg); text-decoration: none; }
+.ad-rowlink:hover { color: var(--accent); text-decoration: underline; }
+.ad-rowlink:focus-visible, .ad-back:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+.ad-chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+.ad-chip { flex: none; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--border-b); background: var(--surface); color: var(--fg-2); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+.ad-chip:hover { color: var(--fg); }
+.ad-chip.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+.ad-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.ad-filterbar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; }
+.ad-filter { display: flex; flex-direction: column; gap: 5px; font-size: 12px; font-weight: 700; color: var(--fg-2); letter-spacing: 0.02em; }
+.ad-filter.ad-grow { flex: 1; min-width: 200px; }
+.ad-select, .ad-input { background: var(--surface); border: 1px solid var(--border-b); border-radius: 10px; padding: 9px 12px; color: var(--fg); font: inherit; font-size: 14px; min-width: 150px; }
+.ad-input { width: 100%; }
+.ad-select option { background: var(--bg-2); color: var(--fg); }
+.ad-select:focus-visible, .ad-input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.ad-pager { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 14px; color: var(--fg-2); font-size: 13px; margin: 0; }
+.ad-orders-table { min-width: 880px; }
+.ad-orders-table td { white-space: nowrap; }
+.ad-orders-table .ad-items { white-space: nowrap; }
+.ad-section-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; margin: 0; display: flex; align-items: center; gap: 10px; }
+.ad-rowhead-title { font-size: 15px; font-weight: 800; margin: 0; }
+.ad-hint-block { color: var(--fg-2); font-size: 13.5px; margin: 0; }
+.ad-back { display: inline-flex; width: fit-content; color: var(--fg-2); text-decoration: none; font-weight: 600; font-size: 13px; margin-bottom: 4px; }
+.ad-back:hover { color: var(--accent); }
+.ad-detail { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(300px, 1fr); gap: 20px; align-items: start; }
+.ad-lines { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.ad-lines li { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.ad-lines li:first-child { padding-top: 0; }
+.ad-line-main { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.ad-line-price { font-variant-numeric: tabular-nums; white-space: nowrap; font-weight: 600; }
+.ad-note { color: var(--warn); font-size: 12.5px; margin-top: 2px; }
+.ad-note-block { margin: 0; padding: 10px 12px; border-radius: 10px; background: var(--warn-bg); color: var(--fg); overflow-wrap: anywhere; }
+.ad-kvs, .ad-totals { margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.ad-kv { display: flex; justify-content: space-between; gap: 16px; font-size: 14px; }
+.ad-kv dt { color: var(--fg-2); flex: none; }
+.ad-kv dd { margin: 0; text-align: right; min-width: 0; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.ad-kv dd a { color: var(--accent); }
+.ad-kv.total { border-top: 1px solid var(--border-b); padding-top: 12px; font-size: 17px; font-weight: 800; }
+.ad-kv.total dt { color: var(--fg); }
+.ad-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0; }
+.ad-steps li { display: flex; align-items: center; gap: 12px; padding: 8px 0; position: relative; color: var(--fg-3); }
+.ad-steps li:not(:last-child)::after { content: ''; position: absolute; left: 10px; top: 30px; bottom: -8px; width: 2px; background: var(--border-b); }
+.ad-steps li.done:not(:last-child)::after { background: var(--good); }
+.ad-step-dot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border-b); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex: none; background: var(--bg); position: relative; z-index: 1; }
+.ad-steps li.done { color: var(--fg-2); }
+.ad-steps li.done .ad-step-dot { background: var(--good); border-color: var(--good); color: #04231e; }
+.ad-steps li.current { color: var(--fg); font-weight: 800; }
+.ad-steps li.current .ad-step-dot { border-color: var(--accent); background: var(--accent-dim); box-shadow: 0 0 0 4px var(--accent-dim); }
+.ad-step-text { flex: 1; min-width: 0; }
+.ad-cancelled p { margin: 8px 0 0; color: var(--fg-2); overflow-wrap: anywhere; }
+.ad-refund-facts { margin: 0; color: var(--fg-2); }
+@media (max-width: 960px) { .ad-detail { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 520px) { .ad-select { min-width: 0; width: 100%; } .ad-filter { flex: 1 1 140px; } }
+
+/* Status badges. The customer area defines these in customer.css, which isn't loaded here. */
+.badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.03em; white-space: nowrap; border: 1px solid transparent; }
+.badge-good { background: var(--good-bg); color: var(--good); border-color: rgba(0, 212, 180, 0.3); }
+.badge-crit { background: var(--crit-bg); color: var(--crit); border-color: rgba(255, 87, 87, 0.3); }
+.badge-warn { background: var(--warn-bg); color: var(--warn); border-color: rgba(255, 209, 102, 0.3); }
+.badge-accent { background: var(--accent-dim); color: var(--accent); border-color: rgba(255, 107, 53, 0.3); }
+.badge-violet { background: var(--violet-dim); color: var(--violet); border-color: rgba(168, 85, 247, 0.3); }

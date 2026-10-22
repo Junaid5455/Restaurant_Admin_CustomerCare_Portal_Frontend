@@ -28,7 +28,7 @@ export const ADMIN_NAV: { label: string; items: NavItem[] }[] = [
   {
     label: 'Restaurant',
     items: [
-      { href: '/owner/orders', icon: '📋', text: 'Orders', ready: false },
+      { href: '/owner/orders', icon: '📋', text: 'Orders', ready: true },
       { href: '/owner/menu', icon: '🍕', text: 'Menu', ready: false },
       { href: '/owner/reservations', icon: '📅', text: 'Reservations', ready: false },
       { href: '/owner/reviews', icon: '⭐', text: 'Reviews', ready: false },
