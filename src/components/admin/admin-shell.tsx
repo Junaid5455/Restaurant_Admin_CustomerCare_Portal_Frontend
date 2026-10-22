@@ -39,7 +39,7 @@ export const ADMIN_NAV: { label: string; items: NavItem[] }[] = [
     items: [
       { href: '/owner/staff', icon: '👥', text: 'Staff', ready: false },
       { href: '/owner/analytics', icon: '📊', text: 'Analytics', ready: false },
-      { href: '/owner/settings', icon: '⚙️', text: 'Settings', ready: false },
+      { href: '/owner/settings', icon: '⚙️', text: 'Settings', ready: true },
     ],
   },
 ];
