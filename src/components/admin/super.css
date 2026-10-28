@@ -1,0 +1,32 @@
+/* Platform (super admin) pages, step 8.1. */
+.su-kpis { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
+.su-count { margin-left: 6px; opacity: 0.75; font-variant-numeric: tabular-nums; }
+.su-toolbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+.su-search { flex: 1; min-width: 220px; max-width: 360px; }
+.su-name { font-weight: 600; overflow-wrap: anywhere; }
+.su-sub { color: var(--fg-3); font-size: 12.5px; overflow-wrap: anywhere; }
+.su-table th, .su-table td { vertical-align: middle; }
+.su-table { min-width: 720px; }
+.su-actions { text-align: right; white-space: nowrap; }
+.su-you { color: var(--fg-3); font-size: 12px; }
+.su-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.su-list li { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13.5px; }
+.su-list li:last-child { border-bottom: 0; }
+.su-list a { color: inherit; text-decoration: none; min-width: 0; }
+.su-list a:hover strong { color: var(--accent); }
+.su-grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: start; }
+.su-share { display: inline-block; height: 6px; border-radius: 3px; background: var(--accent); vertical-align: middle; margin-left: 8px; min-width: 2px; }
+.su-thread { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.su-msg { max-width: 640px; padding: 12px 14px; border-radius: 14px; background: var(--surface); border: 1px solid var(--border); }
+.su-msg.staff { align-self: flex-end; background: var(--accent-dim); border-color: transparent; }
+.su-msg-h { display: flex; justify-content: space-between; gap: 12px; color: var(--fg-3); font-size: 12px; margin-bottom: 4px; flex-wrap: wrap; }
+.su-msg p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.su-reply { display: flex; flex-direction: column; gap: 10px; }
+.su-select { min-width: 150px; }
+.su-detail { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+.su-facts { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 8px 14px; margin: 0; font-size: 13.5px; }
+.su-facts dt { color: var(--fg-3); }
+.su-facts dd { margin: 0; overflow-wrap: anywhere; }
+@media (max-width: 1200px) { .su-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 900px) { .su-grid-2, .su-detail { grid-template-columns: minmax(0, 1fr); } .su-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .su-kpis { grid-template-columns: minmax(0, 1fr); } }

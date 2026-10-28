@@ -24,7 +24,7 @@ export const ADMIN_LOGIN = '/owner/login';
 
 /** Where to send someone who isn't signed in, depending on the area they tried to open. */
 export function loginPathFor(pathname: string): string {
-  const team = ['/owner', '/kitchen'].some((p) => pathname === p || pathname.startsWith(p + '/'));
+  const team = ['/owner', '/kitchen', '/admin'].some((p) => pathname === p || pathname.startsWith(p + '/'));
   return team ? ADMIN_LOGIN : '/login';
 }
 

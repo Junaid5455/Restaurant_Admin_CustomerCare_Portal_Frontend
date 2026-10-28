@@ -1,5 +1,5 @@
-import { RoleHome } from '@/components/role-home';
+import { SuperOverviewView } from '@/components/admin/super-overview-view';
 
 export default function Page() {
-  return <RoleHome title="Admin dashboard" />;
+  return <SuperOverviewView />;
 }

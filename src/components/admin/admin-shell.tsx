@@ -46,15 +46,36 @@ export const ADMIN_NAV: { label: string; items: NavItem[] }[] = [
   },
 ];
 
-const isActive = (pathname: string, href: string) =>
-  href === '/owner' ? pathname === '/owner' : pathname === href || pathname.startsWith(href + '/');
+/** The platform team's menu. Every entry is live. */
+export const SUPER_NAV: { label: string; items: NavItem[] }[] = [
+  {
+    label: 'Platform',
+    items: [
+      { href: '/admin', icon: '⊞', text: 'Overview', ready: true },
+      { href: '/admin/restaurants', icon: '🏪', text: 'Restaurants', ready: true },
+      { href: '/admin/customers', icon: '👥', text: 'People', ready: true },
+    ],
+  },
+  {
+    label: 'Business',
+    items: [
+      { href: '/admin/revenue', icon: '💰', text: 'Revenue', ready: true },
+      { href: '/admin/analytics', icon: '📊', text: 'Analytics', ready: true },
+      { href: '/admin/support', icon: '🎫', text: 'Support', ready: true },
+    ],
+  },
+];
 
-function titleFor(pathname: string) {
-  for (const s of ADMIN_NAV) for (const i of s.items) if (isActive(pathname, i.href)) return i.text;
+const isActive = (pathname: string, href: string) =>
+  href === '/owner' || href === '/admin' ? pathname === href : pathname === href || pathname.startsWith(href + '/');
+
+function titleFor(pathname: string, nav = ADMIN_NAV) {
+  for (const s of nav) for (const i of s.items) if (isActive(pathname, i.href)) return i.text;
   return 'Dashboard';
 }
 
-export function AdminShell({ children }: { children: ReactNode }) {
+export function AdminShell({ children, area = 'owner' }: { children: ReactNode; area?: 'owner' | 'platform' }) {
+  const nav = area === 'platform' ? SUPER_NAV : ADMIN_NAV;
   const pathname = usePathname();
   const router = useRouter();
   const { user, logout } = useAuth();
@@ -82,12 +103,12 @@ export function AdminShell({ children }: { children: ReactNode }) {
             <div className="brand-icon" aria-hidden="true">🍽</div>
             <div>
               <div className="brand-name">Savoria</div>
-              <div className="brand-sub">Restaurant Admin</div>
+              <div className="brand-sub">{area === 'platform' ? 'Platform Admin' : 'Restaurant Admin'}</div>
             </div>
           </div>
         </div>
 
-        {ADMIN_NAV.map((section) => (
+        {nav.map((section) => (
           <div className="ad-nav-section" key={section.label}>
             <div className="ad-nav-label">{section.label}</div>
             {section.items.map((item) => {
@@ -149,7 +170,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
           >
             ☰
           </button>
-          <div className="ad-title">{titleFor(pathname)}</div>
+          <div className="ad-title">{titleFor(pathname, nav)}</div>
           <div className="ad-topbar-actions">
             <ThemeToggle />
           </div>
