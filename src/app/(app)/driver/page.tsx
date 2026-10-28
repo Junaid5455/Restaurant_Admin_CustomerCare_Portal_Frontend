@@ -1,5 +1,5 @@
-import { RoleHome } from '@/components/role-home';
+import { DriverView } from '@/components/driver/driver-view';
 
 export default function Page() {
-  return <RoleHome title="Driver dashboard" />;
+  return <DriverView />;
 }

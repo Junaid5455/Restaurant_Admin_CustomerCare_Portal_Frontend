@@ -1,0 +1,44 @@
+/* Driver page (step 7.8). Self-contained: /driver loads no other stylesheet. */
+.dr { min-height: 100vh; background: var(--bg); color: var(--fg); font-size: 15px; }
+.dr-top { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--bg-2); border-bottom: 1px solid var(--border-b); }
+.dr-brand { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; }
+.dr-brand h1 { font-size: 18px; font-weight: 800; line-height: 1.1; margin: 0; }
+.dr-brand small { display: block; color: var(--fg-2); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dr-icon, .dr-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; border-radius: 12px; border: 1px solid var(--border-b); background: transparent; color: var(--fg); font: inherit; font-weight: 600; cursor: pointer; padding: 0 16px; text-decoration: none; }
+.dr-icon { width: 44px; padding: 0; }
+.dr-btn:hover, .dr-icon:hover { background: var(--accent-dim); }
+.dr-btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; width: 100%; min-height: 52px; font-size: 16px; }
+.dr-btn.primary:hover { filter: brightness(1.08); }
+.dr-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.dr :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.dr-main { max-width: 720px; margin: 0 auto; padding: 16px; display: flex; flex-direction: column; gap: 16px; }
+.dr-card { background: var(--bg-2); border: 1px solid var(--border-b); border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.dr-share { display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 14px; }
+.dr-share small { display: block; color: var(--fg-2); font-size: 12.5px; margin-top: 2px; }
+.dr-share.on { border-color: var(--good); }
+.dr-switch { position: relative; width: 52px; height: 30px; flex: none; }
+.dr-switch input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; margin: 0; cursor: pointer; z-index: 1; }
+.dr-switch span { position: absolute; inset: 0; border-radius: 999px; background: var(--border-b); transition: background 0.15s; }
+.dr-switch span::after { content: ''; position: absolute; left: 3px; top: 3px; width: 24px; height: 24px; border-radius: 50%; background: #fff; transition: transform 0.15s; }
+.dr-switch input:checked + span { background: var(--good); }
+.dr-switch input:checked + span::after { transform: translateX(22px); }
+.dr-switch input:focus-visible + span { outline: 3px solid var(--accent); outline-offset: 2px; }
+.dr-order { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.dr-order h2 { margin: 0; font-size: 20px; font-weight: 800; }
+.dr-sub { color: var(--fg-2); font-size: 13px; }
+.dr-addr { font-size: 17px; font-weight: 600; overflow-wrap: anywhere; }
+.dr-note { padding: 10px 12px; border-radius: 12px; background: var(--accent-dim); font-size: 14px; }
+.dr-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.dr-link { color: var(--accent); font-weight: 700; }
+.dr h2.dr-h { font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-3); font-weight: 700; margin: 4px 0 0; }
+.dr-badge { display: inline-flex; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; border: 1px solid var(--border-b); }
+.dr-badge.warn { color: var(--warn, #ffb020); }
+.dr-badge.accent { color: var(--accent); background: var(--accent-dim); }
+.dr-badge.violet { color: var(--violet); background: var(--violet-dim); }
+.dr-badge.good { color: var(--good); background: var(--good-bg); }
+.dr-late { color: #ff6b6b; font-weight: 700; font-size: 13px; }
+.dr-empty { text-align: center; color: var(--fg-2); padding: 32px 16px; }
+.dr-err { color: #ff6b6b; font-size: 13px; }
+.dr-skel { height: 160px; border-radius: 18px; background: var(--surface-b); animation: dr-pulse 1.2s ease-in-out infinite; }
+@keyframes dr-pulse { 50% { opacity: 0.5; } }
+@media (prefers-reduced-motion: reduce) { .dr-skel { animation: none; } .dr-switch span, .dr-switch span::after { transition: none; } }
