@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useState, type ReactNode } from 'react';
 import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/submit-button';
@@ -261,7 +262,7 @@ export function DashboardView() {
                 <li key={t.id}>
                   <div className="ad-list-icon" aria-hidden="true">{CATEGORY_ICON[t.category]}</div>
                   <div className="ad-list-main">
-                    <div className="ad-list-title" title={t.subject}>{t.subject}</div>
+                    <div className="ad-list-title" title={t.subject}><Link href={`/owner/tickets/${t.id}`} style={{ color: 'inherit', textDecoration: 'none' }}>{t.subject}</Link></div>
                     <div className="ad-list-sub">{CATEGORY_LABEL[t.category]} · {timeAgo(t.created_at)}</div>
                   </div>
                   <span className={`badge ${ticketBadgeClass(t.status)}`}>{TICKET_STATUS_LABEL[t.status]}</span>

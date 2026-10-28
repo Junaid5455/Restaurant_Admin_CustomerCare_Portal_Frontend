@@ -22,7 +22,7 @@ export const ADMIN_NAV: { label: string; items: NavItem[] }[] = [
     label: 'Overview',
     items: [
       { href: '/owner', icon: '⊞', text: 'Dashboard', ready: true },
-      { href: '/owner/tickets', icon: '🎫', text: 'Tickets', ready: false },
+      { href: '/owner/tickets', icon: '🎫', text: 'Tickets', ready: true },
     ],
   },
   {
