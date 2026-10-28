@@ -30,6 +30,7 @@ export const ADMIN_NAV: { label: string; items: NavItem[] }[] = [
     items: [
       { href: '/owner/orders', icon: '📋', text: 'Orders', ready: true },
       { href: '/owner/menu', icon: '🍕', text: 'Menu', ready: true },
+      { href: '/owner/kitchen', icon: '🍳', text: 'Kitchen display', ready: true },
       { href: '/owner/reservations', icon: '📅', text: 'Reservations', ready: false },
       { href: '/owner/reviews', icon: '⭐', text: 'Reviews', ready: false },
     ],

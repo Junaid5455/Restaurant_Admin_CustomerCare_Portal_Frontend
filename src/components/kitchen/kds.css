@@ -1,0 +1,106 @@
+/* Kitchen display. Self-contained: it is mounted under /kitchen (no other stylesheet) and /owner/kitchen (over the admin shell). */
+.kds { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; background: var(--bg); color: var(--fg); font-size: 15px; overflow: hidden; }
+.kds-large { font-size: 18px; }
+
+.kds-top { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; padding: 10px 18px; background: var(--bg-2); border-bottom: 1px solid var(--border-b); }
+.kds-brand { display: flex; align-items: center; gap: 10px; }
+.kds-logo { font-size: 26px; }
+.kds-brand h1 { font-size: 20px; font-weight: 800; line-height: 1.1; }
+.kds-sub { font-size: 12px; color: var(--fg-2); }
+.kds-pills { display: flex; gap: 8px; }
+.kds-pill { padding: 6px 14px; border-radius: 999px; background: var(--accent-dim); color: var(--accent); font-weight: 600; font-size: 14px; }
+.kds-pill b { font-size: 18px; font-weight: 800; margin-right: 3px; }
+.kds-pill.is-flash { animation: kds-flash 0.9s ease-in-out infinite; }
+.kds-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+.kds-filters button { padding: 8px 14px; border-radius: 10px; border: 1px solid var(--border-b); background: transparent; color: var(--fg-2); font-weight: 600; cursor: pointer; font-size: 14px; }
+.kds-filters button span { margin-left: 4px; opacity: 0.7; }
+.kds-filters button.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+.kds-tools { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.kds-time { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; margin-right: 6px; }
+.kds-icon, .kds-tools .icon-btn { width: 44px; height: 44px; display: inline-grid; place-items: center; border-radius: 10px; border: 1px solid var(--border-b); background: transparent; color: var(--fg); cursor: pointer; font-size: 18px; }
+.kds-icon:hover, .kds-tools .icon-btn:hover { background: var(--accent-dim); }
+.kds-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--border-b); background: transparent; color: var(--fg); font-weight: 600; font-size: 14px; cursor: pointer; text-decoration: none; }
+.kds-btn:hover { background: var(--accent-dim); }
+.kds :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.kds-pop-wrap { position: relative; }
+.kds-pop { position: absolute; right: 0; top: calc(100% + 8px); z-index: 20; width: 320px; max-width: calc(100vw - 24px); display: flex; flex-direction: column; gap: 14px; padding: 16px; border-radius: 14px; background: var(--bg-2); border: 1px solid var(--border-b); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45); }
+.kds-toggle { display: flex; align-items: center; justify-content: space-between; gap: 14px; cursor: pointer; }
+.kds-toggle small, .kds-field small { display: block; color: var(--fg-2); font-size: 12px; font-weight: 400; margin-top: 2px; }
+.kds-toggle input { position: absolute; opacity: 0; pointer-events: none; }
+.kds-toggle i { flex: none; width: 46px; height: 26px; border-radius: 999px; background: var(--border-b); position: relative; transition: background 0.15s; }
+.kds-toggle i::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform 0.15s; }
+.kds-toggle input:checked + i { background: var(--good); }
+.kds-toggle input:checked + i::after { transform: translateX(20px); }
+.kds-toggle input:focus-visible + i { outline: 3px solid var(--accent); outline-offset: 2px; }
+.kds-field { display: flex; flex-direction: column; gap: 4px; }
+.kds-field input { width: 100px; min-height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--border-b); background: var(--bg); color: var(--fg); font-size: 16px; }
+
+.kds-banner { display: block; width: 100%; padding: 12px 18px; text-align: left; border: 0; font-size: 14px; font-weight: 600; cursor: pointer; }
+.kds-banner.is-info { background: var(--accent-dim); color: var(--fg); }
+.kds-banner.is-warn { background: var(--crit-bg); color: var(--crit); cursor: default; }
+.kds-banner.is-new { background: var(--accent); color: #fff; animation: kds-flash 0.9s ease-in-out infinite; }
+
+.kds-board { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; padding: 16px 18px 20px; overflow: hidden; }
+.kds-col { min-height: 0; overflow-y: auto; padding-right: 4px; }
+.kds-col h2 { position: sticky; top: 0; z-index: 2; margin: 0 0 12px; padding: 4px 0 8px; background: var(--bg); font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-2); }
+.kds-col h2 span { margin-left: 6px; padding: 2px 9px; border-radius: 999px; background: var(--accent-dim); color: var(--accent); font-size: 13px; }
+.kds-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 14px; align-items: start; }
+.kds-empty { padding: 48px 16px; text-align: center; color: var(--fg-3); font-size: 16px; border: 2px dashed var(--border-b); border-radius: 14px; }
+.kds-state { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center; text-align: center; padding: 60px 16px; color: var(--fg-2); }
+.kds-state strong { color: var(--fg); font-size: 20px; }
+
+.kds-ticket { position: relative; display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: 14px; background: var(--bg-2); border: 2px solid var(--border-b); border-left-width: 8px; }
+.kds-ticket.u-ok { border-left-color: var(--good); }
+.kds-ticket.u-warn { border-color: var(--warn); }
+.kds-ticket.u-late { border-color: var(--crit); background: var(--crit-bg); }
+.kds-ticket.is-cooking { box-shadow: inset 0 0 0 1px var(--border); }
+.kds-ticket.is-fresh { animation: kds-ring 1.1s ease-in-out infinite; cursor: pointer; }
+.kds-ticket-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.kds-num { font-size: 28px; font-weight: 800; line-height: 1; }
+.kds-place { margin-top: 5px; font-weight: 600; color: var(--fg-2); }
+.kds-count { font-weight: 400; }
+.kds-timer { text-align: right; }
+.kds-clock { display: block; font-size: 30px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+.u-warn .kds-clock { color: var(--warn); }
+.u-late .kds-clock { color: var(--crit); }
+.kds-clock-sub { font-size: 12px; color: var(--fg-2); }
+.kds-bar { height: 6px; border-radius: 99px; background: var(--border); overflow: hidden; }
+.kds-bar span { display: block; height: 100%; background: var(--good); transition: width 1s linear; }
+.u-warn .kds-bar span { background: var(--warn); }
+.u-late .kds-bar span { background: var(--crit); }
+.kds-newtag { align-self: flex-start; padding: 3px 10px; border-radius: 6px; background: var(--accent); color: #fff; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; }
+
+.kds-items { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.kds-item-line { display: flex; gap: 10px; font-size: 19px; font-weight: 700; line-height: 1.25; }
+.kds-qty { flex: none; min-width: 38px; color: var(--accent); }
+.kds-mods { list-style: none; margin: 4px 0 0 48px; padding: 0; color: var(--fg-2); font-size: 15px; line-height: 1.4; }
+.kds-mod-k { color: var(--fg-3); }
+.kds-note { margin: 6px 0 0 48px; padding: 7px 10px; border-radius: 8px; background: var(--warn-bg); color: var(--warn); font-weight: 600; font-size: 14.5px; }
+.kds-note-order { margin-left: 0; }
+.kds-action { min-height: 56px; border: 0; border-radius: 12px; font-size: 18px; font-weight: 800; cursor: pointer; color: #fff; }
+.kds-action.is-start { background: var(--accent); }
+.kds-action.is-ready { background: var(--good); color: #04231e; }
+.kds-action:disabled { opacity: 0.6; cursor: progress; }
+.kds-action:hover:not(:disabled) { filter: brightness(1.08); }
+
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+@keyframes kds-flash { 0%, 100% { opacity: 1; } 50% { opacity: 0.55; } }
+@keyframes kds-ring { 0%, 100% { box-shadow: 0 0 0 0 var(--accent-glow); border-color: var(--accent); } 50% { box-shadow: 0 0 0 10px transparent; border-color: var(--accent); } }
+@media (prefers-reduced-motion: reduce) { .kds-pill.is-flash, .kds-banner.is-new, .kds-ticket.is-fresh { animation: none; } .kds-ticket.is-fresh { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-glow); } }
+
+/* Phones and small tablets: one column, and the New column first. */
+@media (max-width: 900px) {
+  .kds-board { grid-template-columns: minmax(0, 1fr); overflow-y: auto; }
+  .kds-col { overflow: visible; }
+  .kds-col h2 { position: static; }
+  .kds-top { gap: 10px; padding: 8px 12px; }
+  .kds-tools { margin-left: 0; width: 100%; flex-wrap: wrap; }
+}
+
+/* Toasts (the admin and customer stylesheets define these too, but /kitchen loads neither). */
+.sv-toasts { position: fixed; right: 20px; bottom: 20px; z-index: 200; display: flex; flex-direction: column; gap: 8px; max-width: calc(100vw - 40px); }
+.sv-toast { display: flex; gap: 10px; align-items: center; padding: 12px 16px; border-radius: var(--r-sm, 10px); background: var(--bg-2); border: 1px solid var(--border-b); box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35); font-size: 15px; font-weight: 500; color: var(--fg); }
+.sv-toast.success { border-color: rgba(0, 212, 180, 0.45); }
+.sv-toast.error { border-color: rgba(255, 87, 87, 0.5); }

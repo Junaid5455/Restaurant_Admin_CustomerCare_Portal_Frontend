@@ -1,5 +1,5 @@
-import { RoleHome } from '@/components/role-home';
+import { KdsView } from '@/components/kitchen/kds-view';
 
 export default function Page() {
-  return <RoleHome title="Kitchen display" />;
+  return <KdsView mode="staff" />;
 }
