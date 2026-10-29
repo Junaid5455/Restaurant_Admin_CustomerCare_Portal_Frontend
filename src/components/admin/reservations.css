@@ -1,0 +1,28 @@
+.rs-day { display: flex; flex-direction: column; gap: 10px; }
+.rs-day-h { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.rs-day-h h2 { margin: 0; font-size: 16px; }
+.rs-day-h span { color: var(--fg-3); font-size: 13px; }
+.rs-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.rs-row { display: grid; grid-template-columns: 84px minmax(0, 1fr) auto; gap: 16px; align-items: center; padding: 14px 16px; border: 1px solid var(--border); border-radius: var(--r); background: var(--surface); }
+.rs-row.is-pending { border-color: var(--warn, var(--accent)); }
+.rs-row.is-off { opacity: 0.65; }
+.rs-time { font-weight: 800; font-size: 18px; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.rs-time small { display: block; margin-top: 4px; font-size: 12px; font-weight: 600; color: var(--fg-3); }
+.rs-main { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.rs-who { font-weight: 700; overflow-wrap: anywhere; }
+.rs-meta { display: flex; flex-wrap: wrap; gap: 6px 14px; color: var(--fg-2); font-size: 13.5px; }
+.rs-note { margin: 2px 0 0; padding: 8px 10px; border-radius: 10px; background: var(--surface-2, var(--accent-dim)); color: var(--fg-2); font-size: 13px; overflow-wrap: anywhere; }
+.rs-side { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+.rs-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.rs-tables { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+.rs-table { display: flex; flex-direction: column; gap: 10px; padding: 16px; border: 1px solid var(--border); border-radius: var(--r); background: var(--surface); }
+.rs-table.is-off { opacity: 0.6; }
+.rs-table h3 { margin: 0; font-size: 17px; overflow-wrap: anywhere; }
+.rs-seats { color: var(--fg-2); font-size: 13.5px; }
+.rs-table-actions { display: flex; gap: 14px; margin-top: auto; }
+@media (max-width: 720px) {
+  .rs-row { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .rs-side { align-items: flex-start; }
+  .rs-actions { justify-content: flex-start; }
+  .rs-time small { display: inline; margin-left: 8px; }
+}

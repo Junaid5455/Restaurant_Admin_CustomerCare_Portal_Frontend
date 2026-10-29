@@ -113,6 +113,11 @@ export function RestaurantDetail({ id }: { id: string }) {
             {r.allows_pickup && <span className="badge badge-accent">🥡 Pickup</span>}
             {r.allows_dine_in && <span className="badge badge-accent">🍽 Dine-in</span>}
           </div>
+          {r.allows_dine_in && (
+            <div style={{ marginTop: 12 }}>
+              <Link href={`/customer/reservations/new?restaurant=${r.id}`} className="btn btn-ghost">📅 Book a table</Link>
+            </div>
+          )}
 
           <dl className="sv-facts">
             <Fact label="Hours">

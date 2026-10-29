@@ -24,7 +24,7 @@ const NAV = [
     items: [
       { href: '/customer/cart', icon: '🛒', text: 'Cart', ready: true },
       { href: '/customer/orders', icon: '📋', text: 'My orders', ready: true },
-      { href: '/customer/reservations', icon: '📅', text: 'Reservations', ready: false },
+      { href: '/customer/reservations', icon: '📅', text: 'Reservations', ready: true },
     ],
   },
   {
@@ -48,6 +48,8 @@ function titleFor(pathname: string) {
   if (/^\/customer\/orders\/.+\/track/.test(pathname)) return 'Track order';
   if (/^\/customer\/orders\/.+/.test(pathname)) return 'Order details';
   if (pathname.startsWith('/customer/orders')) return 'My orders';
+  if (pathname === '/customer/reservations/new') return 'Book a table';
+  if (pathname.startsWith('/customer/reservations')) return 'Reservations';
   if (pathname.startsWith('/customer/settings')) return 'Settings';
   if (pathname === '/customer/support/new') return 'New ticket';
   if (/^\/customer\/support\/.+/.test(pathname)) return 'Support ticket';
