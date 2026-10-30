@@ -7,6 +7,7 @@ import { RestaurantHeart } from './favorite-button';
 import { ItemModal } from './item-modal';
 import { MenuBrowser } from './menu-browser';
 import { RestaurantRating } from './restaurant-card';
+import { RestaurantReviews } from './restaurant-reviews';
 import { Alert } from '@/components/ui/alert';
 import { SafeImage } from '@/components/ui/safe-image';
 import { Button } from '@/components/ui/submit-button';
@@ -192,6 +193,8 @@ export function RestaurantDetail({ id }: { id: string }) {
           <MenuBrowser restaurantId={r.id} categories={menuQuery.data} onSelect={setSelected} />
         )}
       </section>
+
+      <RestaurantReviews restaurantId={r.id} name={r.name} />
 
       {selected && (
         <ItemModal key={selected.id} item={selected} restaurant={{ id: r.id, name: r.name }} onClose={() => setSelected(null)} />

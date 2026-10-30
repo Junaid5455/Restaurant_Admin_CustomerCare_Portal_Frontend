@@ -1,0 +1,8 @@
+.st { display: inline-flex; gap: 2px; line-height: 1; vertical-align: middle; }
+.st-star { color: var(--border-b); }
+.st-star.on { color: #f5b301; }
+.st-input { display: inline-flex; gap: 6px; }
+.st-input button { background: none; border: 0; padding: 4px; font-size: 32px; line-height: 1; cursor: pointer; color: var(--border-b); border-radius: 10px; }
+.st-input button.on { color: #f5b301; }
+.st-input button:hover { transform: scale(1.1); }
+.st-input button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }

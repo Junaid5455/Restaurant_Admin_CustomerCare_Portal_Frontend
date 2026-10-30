@@ -25,6 +25,7 @@ const NAV = [
       { href: '/customer/cart', icon: '🛒', text: 'Cart', ready: true },
       { href: '/customer/orders', icon: '📋', text: 'My orders', ready: true },
       { href: '/customer/reservations', icon: '📅', text: 'Reservations', ready: true },
+      { href: '/customer/reviews', icon: '⭐', text: 'Reviews', ready: true },
     ],
   },
   {
@@ -50,6 +51,7 @@ function titleFor(pathname: string) {
   if (pathname.startsWith('/customer/orders')) return 'My orders';
   if (pathname === '/customer/reservations/new') return 'Book a table';
   if (pathname.startsWith('/customer/reservations')) return 'Reservations';
+  if (pathname.startsWith('/customer/reviews')) return 'Reviews';
   if (pathname.startsWith('/customer/settings')) return 'Settings';
   if (pathname === '/customer/support/new') return 'New ticket';
   if (/^\/customer\/support\/.+/.test(pathname)) return 'Support ticket';

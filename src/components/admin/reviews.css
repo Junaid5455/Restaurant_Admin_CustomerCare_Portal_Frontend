@@ -1,0 +1,27 @@
+.rw-top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 16px; align-items: stretch; }
+.rw-big { display: flex; flex-direction: column; justify-content: center; gap: 6px; }
+.rw-avg { font-size: 54px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+.rw-avg small { font-size: 18px; font-weight: 600; color: var(--fg-3); }
+.rw-bars { display: flex; flex-direction: column; gap: 6px; }
+.rw-bar { display: grid; grid-template-columns: 36px minmax(0, 1fr) 34px; gap: 10px; align-items: center; width: 100%; padding: 4px 6px; border: 0; border-radius: 8px; background: none; color: var(--fg-2); font: inherit; font-size: 13px; cursor: pointer; text-align: left; }
+.rw-bar:hover { background: var(--accent-dim); }
+.rw-bar[aria-pressed='true'] { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
+.rw-bar:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.rw-track { height: 8px; border-radius: 4px; background: var(--surface-c, var(--border)); overflow: hidden; }
+.rw-fill { display: block; height: 100%; border-radius: 4px; background: #f5b301; min-width: 0; }
+.rw-n { text-align: right; font-variant-numeric: tabular-nums; }
+.rw-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.rw-card { padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; }
+.rw-card.waiting { border-color: var(--warn, var(--accent)); }
+.rw-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+.rw-who { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.rw-who strong { overflow-wrap: anywhere; }
+.rw-sub { color: var(--fg-3); font-size: 12.5px; }
+.rw-comment { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.rw-comment.none { color: var(--fg-3); font-style: italic; }
+.rw-reply { margin: 0 0 0 18px; padding: 10px 14px; border-left: 3px solid var(--accent); border-radius: 0 12px 12px 0; background: var(--accent-dim); }
+.rw-reply-h { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; color: var(--fg-3); font-size: 12.5px; margin-bottom: 4px; }
+.rw-reply p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.rw-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+.rw-form { display: flex; flex-direction: column; gap: 10px; margin-left: 18px; }
+@media (max-width: 860px) { .rw-top { grid-template-columns: minmax(0, 1fr); } .rw-reply, .rw-form { margin-left: 0; } }

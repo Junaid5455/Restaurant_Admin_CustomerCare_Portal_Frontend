@@ -33,7 +33,7 @@ export const ADMIN_NAV: { label: string; items: NavItem[] }[] = [
       { href: '/owner/kitchen', icon: '🍳', text: 'Kitchen display', ready: true },
       { href: '/owner/deliveries', icon: '🛵', text: 'Deliveries', ready: true },
       { href: '/owner/reservations', icon: '📅', text: 'Reservations', ready: true },
-      { href: '/owner/reviews', icon: '⭐', text: 'Reviews', ready: false },
+      { href: '/owner/reviews', icon: '⭐', text: 'Reviews', ready: true },
     ],
   },
   {
