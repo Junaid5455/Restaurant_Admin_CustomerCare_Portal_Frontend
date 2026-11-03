@@ -14,7 +14,7 @@ import { STATUS_LABEL, TYPE_ICON, TYPE_LABEL, statusBadgeClass } from '@/lib/ord
 import { timeAgo } from '@/lib/time-ago';
 import { parseError } from '@/lib/errors';
 
-const STATUS_ORDER: OrderStatus[] = ['PLACED', 'CONFIRMED', 'PREPARING', 'READY', 'OUT_FOR_DELIVERY', 'DELIVERED', 'CANCELLED', 'REFUNDED'];
+const STATUS_ORDER: OrderStatus[] = ['PLACED', 'CONFIRMED', 'PREPARING', 'READY', 'DISPATCHED', 'OUT_FOR_DELIVERY', 'DELIVERED', 'CANCELLED', 'REFUNDED'];
 
 function greeting(now = new Date()) {
   const h = now.getHours();

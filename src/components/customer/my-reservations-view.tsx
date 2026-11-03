@@ -11,6 +11,7 @@ import { useToast } from '@/components/ui/toast';
 import { MY_RESERVATIONS_KEY, useMyReservations } from '@/hooks/use-my-reservations';
 import { useNow } from '@/hooks/use-now';
 import { reservationsApi, type Reservation, type ReservationPage } from '@/lib/api/reservations';
+import { canOrderFood, dineInHref } from '@/lib/dine-in';
 import { parseError } from '@/lib/errors';
 import { canGuestCancel, guestStatus, sortTab, tabOf, type Tab } from '@/lib/my-reservations';
 import { clock, timeOf } from '@/lib/reservations';
@@ -38,6 +39,7 @@ function Card({ r, now, busy, onCancel }: { r: Reservation; now: number; busy: b
       </div>
       <div className="rv-side">
         <span className={`badge ${info.cls}`}>{info.text}</span>
+        {canOrderFood(r, now) && <Link href={dineInHref(r)} className="btn btn-primary" aria-label={`Order food for your table at ${name}`}>🍽 Order food</Link>}
         {canGuestCancel(r, now) && <Button variant="ghost" disabled={busy} onClick={() => onCancel(r)} aria-label={`Cancel booking at ${name}`}>Cancel booking</Button>}
       </div>
     </article>

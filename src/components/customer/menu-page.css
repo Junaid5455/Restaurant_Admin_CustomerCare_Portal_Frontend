@@ -1,0 +1,21 @@
+.mp-picker { display: flex; gap: 16px; align-items: flex-end; flex-wrap: wrap; padding: 16px 18px; margin-bottom: 14px; }
+.mp-facts { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding-bottom: 8px; }
+.mp-links { display: flex; justify-content: flex-start; gap: 18px; flex-wrap: wrap; margin-bottom: 12px; }
+.mp-links > * { flex: 0 0 auto; width: auto; }
+
+/* Read-only menu preview shown on the Book a table page. */
+.mp-preview { border: 1px solid var(--border, rgba(127, 127, 127, 0.25)); border-radius: 14px; padding: 4px 14px; }
+.mp-preview > summary { cursor: pointer; font-weight: 700; padding: 10px 0; list-style-position: inside; }
+.mp-preview-body { max-height: 340px; overflow-y: auto; padding: 4px 2px 12px; display: flex; flex-direction: column; gap: 14px; }
+.mp-preview h4 { margin: 0 0 6px; font-size: 14px; letter-spacing: 0.02em; }
+.mp-preview ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.mp-preview li { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+.mp-preview li span:first-child { min-width: 0; overflow-wrap: anywhere; }
+.mp-preview li small { display: block; color: var(--fg-3); font-size: 12px; }
+.mp-preview .mp-price { font-weight: 700; white-space: nowrap; }
+.mp-preview-foot { display: flex; gap: 14px; flex-wrap: wrap; padding: 4px 0 12px; font-size: 14px; }
+
+/* Selectable menu inside the Book a table form. */
+.mp-row-end { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
+.mp-add { padding: 4px 12px; min-height: 34px; font-size: 13px; white-space: nowrap; }
+.mp-preview-foot { align-items: center; justify-content: space-between; }

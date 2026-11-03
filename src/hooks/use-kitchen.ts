@@ -1,11 +1,14 @@
 import { useCallback, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { kitchenApi, type KitchenOrder } from '@/lib/api/kitchen';
+import { kitchenApi, type KitchenAction, type KitchenOrder } from '@/lib/api/kitchen';
 import type { ApiError } from '@/lib/errors';
 import { parseError } from '@/lib/errors';
 
 export const KITCHEN_KEY = ['kitchen-orders'] as const;
 export const POLL_MS = 5000;
+
+/** The status each button moves a ticket to. */
+const NEXT = { confirm: 'CONFIRMED', start: 'PREPARING', ready: 'READY', dispatch: 'READY' } as const;
 
 /**
  * The live board. The backend has no push channel, so this polls every 5 seconds, including while the tab is in the
@@ -37,17 +40,17 @@ export function useKitchenActions() {
     });
 
   const run = useCallback(
-    async (order: KitchenOrder, action: 'start' | 'ready'): Promise<{ ok: true } | { ok: false; error: ApiError }> => {
+    async (order: KitchenOrder, action: KitchenAction): Promise<{ ok: true } | { ok: false; error: ApiError }> => {
       mark(order.id, true);
       await qc.cancelQueries({ queryKey: KITCHEN_KEY });
       const before = qc.getQueryData<KitchenOrder[]>(KITCHEN_KEY);
       qc.setQueryData<KitchenOrder[]>(KITCHEN_KEY, (rows) =>
-        action === 'ready'
+        action === 'dispatch'
           ? rows?.filter((o) => o.id !== order.id)
-          : rows?.map((o) => (o.id === order.id ? { ...o, status: 'PREPARING' as const } : o)),
+          : rows?.map((o) => (o.id === order.id ? { ...o, status: NEXT[action] } : o)),
       );
       try {
-        await (action === 'start' ? kitchenApi.start(order.id) : kitchenApi.ready(order.id));
+        await kitchenApi[action](order.id);
         return { ok: true };
       } catch (e) {
         qc.setQueryData(KITCHEN_KEY, before);

@@ -1,9 +1,10 @@
 import Link from 'next/link';
+import { StatusProgress } from './status-progress';
 import { ReorderButton } from './reorder-button';
 import type { Order } from '@/lib/api/orders';
 import { formatMoney } from '@/lib/format';
 import { formatDateTime } from '@/lib/pickup';
-import { STATUS_LABEL, TYPE_ICON, TYPE_LABEL, isFinished, needsPayment, paymentLabel, statusBadgeClass } from '@/lib/order-status';
+import { STATUS_LABEL, TYPE_ICON, TYPE_LABEL, isFinished, needsPayment, paymentLabel, statusBadgeClass, statusMessage } from '@/lib/order-status';
 
 export function OrderCard({ order }: { order: Order }) {
   const finished = isFinished(order.status);
@@ -33,6 +34,13 @@ export function OrderCard({ order }: { order: Order }) {
         {summary || 'No items'}
       </p>
 
+      {!finished && (
+        <>
+          <p className="sv-order-items" style={{ fontWeight: 600 }}>{statusMessage(order)}</p>
+          <StatusProgress status={order.status} type={order.order_type} />
+        </>
+      )}
+
       <div className="sv-order-foot">
         <div className="sv-order-meta">
           <span>{TYPE_ICON[order.order_type]} {TYPE_LABEL[order.order_type]}</span>
@@ -43,8 +51,8 @@ export function OrderCard({ order }: { order: Order }) {
           {unpaid && (
             <Link href={`/customer/checkout/payment/${order.id}`} className="btn btn-primary">Pay now</Link>
           )}
-          {!finished && !unpaid && (
-            <Link href={`/customer/orders/${order.id}/track`} className="btn btn-primary">Track order</Link>
+          {!finished && (
+            <Link href={`/customer/orders/${order.id}/track`} className={unpaid ? 'btn btn-ghost' : 'btn btn-primary'}>Track order</Link>
           )}
           {finished && <ReorderButton order={order} className="btn btn-primary" label="Order again" />}
           <Link href={`/customer/orders/${order.id}`} className="btn btn-ghost">Details</Link>

@@ -1,6 +1,6 @@
 'use client';
 
-import type { KitchenOrder } from '@/lib/api/kitchen';
+import type { KitchenAction, KitchenOrder } from '@/lib/api/kitchen';
 import { TYPE_ICON, TYPE_LABEL, clockStart, formatClock, itemCount, shortNumber, targetMinutes, urgency, type KdsPrefs } from '@/lib/kitchen';
 
 interface Props {
@@ -12,17 +12,25 @@ interface Props {
   /** Arrived since the cook last looked: flashes until acknowledged. */
   fresh: boolean;
   busy: boolean;
-  onStart: () => void;
-  onReady: () => void;
+  onAction: (a: KitchenAction) => void;
   onAck: () => void;
 }
 
-export function OrderTicket({ order, now, prefs, startedAt, fresh, busy, onStart, onReady, onAck }: Props) {
+const STEP: Record<KitchenOrder['status'], { action: KitchenAction; text: string; cls: string }> = {
+  PLACED: { action: 'confirm', text: '✔ Accept order', cls: 'is-start' },
+  CONFIRMED: { action: 'start', text: '▶ Start cooking', cls: 'is-start' },
+  PREPARING: { action: 'ready', text: '✓ Mark ready', cls: 'is-ready' },
+  READY: { action: 'dispatch', text: '🚚 Dispatch', cls: 'is-ready' },
+};
+
+export function OrderTicket({ order, now, prefs, startedAt, fresh, busy, onAction, onAck }: Props) {
   const elapsed = now - clockStart(order);
   const target = targetMinutes(order, prefs);
   const level = urgency(elapsed, target);
   const pct = Math.min(100, Math.round((elapsed / (target * 60_000)) * 100));
   const cooking = order.status === 'PREPARING';
+  const step = STEP[order.status];
+  const stateWord = order.status === 'PLACED' ? 'awaiting acceptance' : order.status === 'READY' ? 'ready' : cooking ? 'cooking' : 'new';
   const place = order.order_type === 'DINE_IN' && order.table_number ? `Table ${order.table_number}` : TYPE_LABEL[order.order_type];
   const notes = [order.special_instructions, order.customer_notes].filter((n): n is string => !!n && !!n.trim());
   const label = `Order ${shortNumber(order.order_number)}`;
@@ -30,7 +38,7 @@ export function OrderTicket({ order, now, prefs, startedAt, fresh, busy, onStart
   return (
     <article
       className={`kds-ticket u-${level} ${cooking ? 'is-cooking' : ''} ${fresh ? 'is-fresh' : ''}`}
-      aria-label={`${label}, ${place}, ${cooking ? 'cooking' : 'new'}, ${Math.floor(elapsed / 60_000)} minutes`}
+      aria-label={`${label}, ${place}, ${stateWord}, ${Math.floor(elapsed / 60_000)} minutes`}
       onClick={fresh ? onAck : undefined}
     >
       <header className="kds-ticket-head">
@@ -85,15 +93,15 @@ export function OrderTicket({ order, now, prefs, startedAt, fresh, busy, onStart
 
       <button
         type="button"
-        className={`kds-action ${cooking ? 'is-ready' : 'is-start'}`}
+        className={`kds-action ${step.cls}`}
         disabled={busy}
         onClick={(e) => {
           e.stopPropagation();
-          cooking ? onReady() : onStart();
+          onAction(step.action);
         }}
-        aria-label={`${cooking ? 'Mark ready' : 'Start cooking'}: ${label}`}
+        aria-label={`${step.text}: ${label}`}
       >
-        {busy ? 'Updating…' : cooking ? '✓ Mark ready' : '▶ Start cooking'}
+        {busy ? 'Updating…' : step.text}
       </button>
     </article>
   );

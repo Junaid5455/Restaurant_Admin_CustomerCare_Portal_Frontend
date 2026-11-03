@@ -52,7 +52,7 @@ interface RawPopular { id: string; name: string; total_quantity_sold: number; to
 interface RawCustomer { customer_id: string; customer_email: string; total_orders: number; total_spent: string }
 interface RawPeak { peak_hour: number; order_count: number }
 
-export const ALL_STATUSES: OrderStatus[] = ['PLACED', 'CONFIRMED', 'PREPARING', 'READY', 'OUT_FOR_DELIVERY', 'DELIVERED', 'CANCELLED', 'REFUNDED'];
+export const ALL_STATUSES: OrderStatus[] = ['PLACED', 'CONFIRMED', 'PREPARING', 'READY', 'DISPATCHED', 'OUT_FOR_DELIVERY', 'DELIVERED', 'CANCELLED', 'REFUNDED'];
 export const ALL_TYPES: OrderType[] = ['DINE_IN', 'PICKUP', 'DELIVERY'];
 
 export interface OrderSample {

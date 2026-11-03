@@ -99,8 +99,7 @@ function StatusCard({ order }: { order: AdminOrder }) {
     DELIVERED: order.delivered_at,
   };
   const cancelled = isCancelled(order.status);
-  // READY isn't a delivery stage, but the kitchen can still set it; keep it visible so the stepper stays truthful.
-  const shown: OrderStatus[] = order.status === 'READY' && order.order_type === 'DELIVERY' ? ['PLACED', 'CONFIRMED', 'PREPARING', 'READY', 'OUT_FOR_DELIVERY', 'DELIVERED'] : stages;
+  const shown: OrderStatus[] = stages;
   const currentIndex = shown.indexOf(order.status);
 
   function move(to: OrderStatus, verb: string) {

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AddressPicker, ADDRESSES_KEY, formatAddress } from './address-picker';
 import { CheckoutSteps } from './checkout-steps';
@@ -17,6 +17,7 @@ import { readAppPrefs } from '@/lib/app-prefs';
 import { cartApi, type Cart, type CheckoutInput, type OrderType } from '@/lib/api/cart';
 import { restaurantsApi, type RestaurantDetail } from '@/lib/api/restaurants';
 import { saveSnapshot } from '@/lib/checkout-session';
+import { clearDineIn, readDineIn } from '@/lib/dine-in';
 import { ApiError, parseError } from '@/lib/errors';
 import { formatMoney, isOpenNow, toNumber } from '@/lib/format';
 import { pickupSlots } from '@/lib/pickup';
@@ -61,6 +62,19 @@ export function CheckoutView() {
   const [formError, setFormError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [placed, setPlaced] = useState(false);
+
+  // Coming from a booking's "Order food": start on dine-in with the booked table filled in.
+  const dineApplied = useRef(false);
+  useEffect(() => {
+    if (dineApplied.current || !restaurantId) return;
+    const d = readDineIn();
+    if (d && d.restaurant === restaurantId) {
+      dineApplied.current = true;
+      setChosenType('DINE_IN');
+      if (d.table) setTable(d.table);
+      if (d.guests) setGuests(d.guests);
+    }
+  }, [restaurantId]);
 
   // Re-roll the pickup slots every minute so a long-open page never offers a time in the past.
   const [now, setNow] = useState(() => new Date());
@@ -171,6 +185,7 @@ export function CheckoutView() {
         address: selectedAddress ? `${selectedAddress.label} · ${formatAddress(selectedAddress)}` : undefined,
         deliveryInstructions: payload.delivery_instructions,
       });
+      if (orderType === 'DINE_IN') clearDineIn();
       setPlaced(true);
       // The cart has become an order: show an empty cart right away, then confirm with the server.
       queryClient.setQueryData<Cart>(CART_KEY, (c) =>

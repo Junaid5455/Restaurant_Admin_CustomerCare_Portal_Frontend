@@ -2,19 +2,17 @@ import type { AdminOrder } from './api/admin-orders';
 import type { OrderStatus } from './api/orders';
 import { isFinished } from './order-status';
 
-/** The order a restaurant moves an order through. READY is skipped for delivery orders (they go straight out). */
+/** The order a restaurant moves an order through. */
 export function flow(type: string): OrderStatus[] {
   return type === 'DELIVERY'
-    ? ['PLACED', 'CONFIRMED', 'PREPARING', 'OUT_FOR_DELIVERY', 'DELIVERED']
-    : ['PLACED', 'CONFIRMED', 'PREPARING', 'READY', 'DELIVERED'];
+    ? ['PLACED', 'CONFIRMED', 'PREPARING', 'READY', 'DISPATCHED', 'OUT_FOR_DELIVERY', 'DELIVERED']
+    : ['PLACED', 'CONFIRMED', 'PREPARING', 'READY', 'DISPATCHED', 'DELIVERED'];
 }
 
 /** The next step the restaurant would normally take, or null when the order is finished. */
 export function nextStatus(o: Pick<AdminOrder, 'status' | 'order_type'>): OrderStatus | null {
   if (isFinished(o.status)) return null;
   const f = flow(o.order_type);
-  // A delivery order the kitchen marked READY still goes out for delivery next.
-  if (o.status === 'READY' && o.order_type === 'DELIVERY') return 'OUT_FOR_DELIVERY';
   const i = f.indexOf(o.status);
   return i >= 0 && i < f.length - 1 ? f[i + 1] : null;
 }
@@ -22,7 +20,6 @@ export function nextStatus(o: Pick<AdminOrder, 'status' | 'order_type'>): OrderS
 /** The step before this one (for correcting a mis-tap), or null at the start / when finished. */
 export function previousStatus(o: Pick<AdminOrder, 'status' | 'order_type'>): OrderStatus | null {
   if (isFinished(o.status)) return null;
-  if (o.status === 'READY' && o.order_type === 'DELIVERY') return 'PREPARING';
   const f = flow(o.order_type);
   const i = f.indexOf(o.status);
   return i > 0 ? f[i - 1] : null;
@@ -33,6 +30,7 @@ export const ACTION_LABEL: Partial<Record<OrderStatus, string>> = {
   CONFIRMED: 'Confirm order',
   PREPARING: 'Start preparing',
   READY: 'Mark ready',
+  DISPATCHED: 'Mark dispatched',
   OUT_FOR_DELIVERY: 'Send out for delivery',
   DELIVERED: 'Mark delivered',
 };

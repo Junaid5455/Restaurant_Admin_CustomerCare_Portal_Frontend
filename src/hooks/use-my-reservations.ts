@@ -32,3 +32,15 @@ export const useSlots = (restaurantId: string, date: string, partySize: number) 
     retry: false,
     staleTime: 15_000,
   });
+
+/** The tables at a restaurant for the chosen time. Refreshes while the guest is choosing so a table someone else just took greys out. */
+export const useTableOptions = (restaurantId: string, time: string, partySize: number) =>
+  useQuery({
+    queryKey: ['reservation-tables', restaurantId, time, partySize],
+    queryFn: () => reservationsApi.tables(restaurantId, time, partySize),
+    enabled: !!restaurantId && !!time,
+    retry: false,
+    staleTime: 5_000,
+    refetchInterval: 15_000,
+    refetchOnWindowFocus: true,
+  });

@@ -41,7 +41,7 @@
 .kds-banner.is-warn { background: var(--crit-bg); color: var(--crit); cursor: default; }
 .kds-banner.is-new { background: var(--accent); color: #fff; animation: kds-flash 0.9s ease-in-out infinite; }
 
-.kds-board { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; padding: 16px 18px 20px; overflow: hidden; }
+.kds-board { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding: 16px 18px 20px; overflow: hidden; }
 .kds-col { min-height: 0; overflow-y: auto; padding-right: 4px; }
 .kds-col h2 { position: sticky; top: 0; z-index: 2; margin: 0 0 12px; padding: 4px 0 8px; background: var(--bg); font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-2); }
 .kds-col h2 span { margin-left: 6px; padding: 2px 9px; border-radius: 999px; background: var(--accent-dim); color: var(--accent); font-size: 13px; }

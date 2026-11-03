@@ -16,7 +16,8 @@ export interface KitchenItem {
   add_ons: { addon_name: string }[];
 }
 
-export type KitchenStatus = 'CONFIRMED' | 'PREPARING';
+export type KitchenStatus = 'PLACED' | 'CONFIRMED' | 'PREPARING' | 'READY';
+export type KitchenAction = 'confirm' | 'start' | 'ready' | 'dispatch';
 
 /**
  * A ticket on the kitchen screen. The stock KitchenOrderSerializer only returns the fields above `customer_notes`;
@@ -48,6 +49,8 @@ export const kitchenApi = {
     const rows = Array.isArray(data) ? data : data?.results ?? [];
     return rows.map(clean);
   },
+  confirm: (id: string) => call<KitchenOrder>(() => api.post(`/kitchen/orders/${id}/confirm/`)),
+  dispatch: (id: string) => call<KitchenOrder>(() => api.post(`/kitchen/orders/${id}/dispatch/`)),
   start: (id: string) => call<KitchenOrder>(() => api.post(`/kitchen/orders/${id}/start/`)),
   ready: (id: string) => call<KitchenOrder>(() => api.post(`/kitchen/orders/${id}/ready/`)),
 };

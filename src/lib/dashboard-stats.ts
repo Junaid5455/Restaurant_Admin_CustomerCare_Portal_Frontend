@@ -6,7 +6,7 @@ import { toNumber } from './format';
  * All "days" are the browser's local calendar days, which for a restaurant owner is the restaurant's day.
  */
 
-export const ACTIVE_STATUSES: OrderStatus[] = ['PLACED', 'CONFIRMED', 'PREPARING', 'READY', 'OUT_FOR_DELIVERY'];
+export const ACTIVE_STATUSES: OrderStatus[] = ['PLACED', 'CONFIRMED', 'PREPARING', 'READY', 'DISPATCHED', 'OUT_FOR_DELIVERY'];
 const NOT_REVENUE: OrderStatus[] = ['CANCELLED', 'REFUNDED'];
 
 export interface DayTotals {

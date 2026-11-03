@@ -10,7 +10,7 @@ import { useToast } from '@/components/ui/toast';
 import { useAuth } from '@/context/auth-context';
 import { useNow } from '@/hooks/use-now';
 import { useKitchenActions, useKitchenOrders } from '@/hooks/use-kitchen';
-import type { KitchenOrder } from '@/lib/api/kitchen';
+import type { KitchenAction, KitchenOrder } from '@/lib/api/kitchen';
 import type { OrderType } from '@/lib/api/cart';
 import type { ApiError } from '@/lib/errors';
 import { ADMIN_LOGIN } from '@/lib/roles';
@@ -92,7 +92,7 @@ export function KdsView({ mode }: { mode: 'staff' | 'owner' }) {
       known.current = ids;
       return;
     }
-    const arrived = orders.filter((o) => !known.current!.has(o.id) && o.status === 'CONFIRMED');
+    const arrived = orders.filter((o) => !known.current!.has(o.id) && (o.status === 'CONFIRMED' || o.status === 'PLACED'));
     known.current = ids;
     setFresh((prev) => {
       const next = new Set([...prev, ...arrived.map((o) => o.id)].filter((id) => ids.has(id)));
@@ -119,7 +119,7 @@ export function KdsView({ mode }: { mode: 'staff' | 'owner' }) {
   }, [fresh.size, prefs.sound, prefs.repeat]);
 
   // Tab title shows the queue, so a hidden tab still tells the story.
-  const waiting = orders?.filter((o) => o.status === 'CONFIRMED').length ?? 0;
+  const waiting = orders?.filter((o) => o.status === 'CONFIRMED' || o.status === 'PLACED').length ?? 0;
   useEffect(() => {
     const base = 'Kitchen · Savoria';
     document.title = fresh.size > 0 ? `🔔 (${fresh.size}) New order · ${base}` : waiting > 0 ? `(${waiting}) ${base}` : base;
@@ -154,7 +154,7 @@ export function KdsView({ mode }: { mode: 'staff' | 'owner' }) {
 
   const ack = useCallback((id: string) => setFresh((s) => (s.has(id) ? new Set([...s].filter((x) => x !== id)) : s)), []);
 
-  async function act(o: KitchenOrder, action: 'start' | 'ready') {
+  async function act(o: KitchenOrder, action: KitchenAction) {
     ack(o.id);
     if (action === 'start') {
       setStarted((s) => {
@@ -165,7 +165,9 @@ export function KdsView({ mode }: { mode: 'staff' | 'owner' }) {
     }
     const res = await run(o, action);
     if (res.ok) {
+      if (action === 'confirm') push(`Order ${shortNumber(o.order_number)} accepted`);
       if (action === 'ready') push(`Order ${shortNumber(o.order_number)} is ready`);
+      if (action === 'dispatch') push(`Order ${shortNumber(o.order_number)} dispatched`);
     } else {
       if (action === 'start') {
         setStarted((s) => {
@@ -189,8 +191,9 @@ export function KdsView({ mode }: { mode: 'staff' | 'owner' }) {
   }, [orders]);
 
   const shown = useMemo(() => (orders ?? []).filter((o) => filter === 'ALL' || o.order_type === filter), [orders, filter]);
-  const incoming = shown.filter((o) => o.status === 'CONFIRMED');
+  const incoming = shown.filter((o) => o.status === 'PLACED' || o.status === 'CONFIRMED');
   const cooking = shown.filter((o) => o.status === 'PREPARING');
+  const ready = shown.filter((o) => o.status === 'READY');
 
   const err = query.error as ApiError | null;
   const stale = orders ? Math.round((now - query.dataUpdatedAt) / 1000) : 0;
@@ -205,8 +208,7 @@ export function KdsView({ mode }: { mode: 'staff' | 'owner' }) {
       startedAt={started[o.id]}
       fresh={fresh.has(o.id)}
       busy={pending.has(o.id)}
-      onStart={() => act(o, 'start')}
-      onReady={() => act(o, 'ready')}
+      onAction={(a) => act(o, a)}
       onAck={() => ack(o.id)}
     />
   );
@@ -225,8 +227,9 @@ export function KdsView({ mode }: { mode: 'staff' | 'owner' }) {
         </div>
 
         <div className="kds-pills" aria-label="Queue">
-          <span className={`kds-pill ${fresh.size ? 'is-flash' : ''}`}><b>{orders?.filter((o) => o.status === 'CONFIRMED').length ?? 0}</b> new</span>
+          <span className={`kds-pill ${fresh.size ? 'is-flash' : ''}`}><b>{orders?.filter((o) => o.status === 'CONFIRMED' || o.status === 'PLACED').length ?? 0}</b> new</span>
           <span className="kds-pill"><b>{orders?.filter((o) => o.status === 'PREPARING').length ?? 0}</b> cooking</span>
+          <span className="kds-pill"><b>{orders?.filter((o) => o.status === 'READY').length ?? 0}</b> ready</span>
         </div>
 
         <div className="kds-filters" role="group" aria-label="Order type">
@@ -339,6 +342,10 @@ export function KdsView({ mode }: { mode: 'staff' | 'owner' }) {
             <section className="kds-col" aria-label="Cooking">
               <h2>Cooking <span>{cooking.length}</span></h2>
               {cooking.length === 0 ? <div className="kds-empty">Nothing on the stove.</div> : <div className="kds-grid">{cooking.map(ticket)}</div>}
+            </section>
+            <section className="kds-col" aria-label="Ready to dispatch">
+              <h2>Ready <span>{ready.length}</span></h2>
+              {ready.length === 0 ? <div className="kds-empty">Nothing waiting to go out.</div> : <div className="kds-grid">{ready.map(ticket)}</div>}
             </section>
           </>
         )}

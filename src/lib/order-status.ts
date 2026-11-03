@@ -6,6 +6,7 @@ export const STATUS_LABEL: Record<OrderStatus, string> = {
   CONFIRMED: 'Confirmed',
   PREPARING: 'Preparing',
   READY: 'Ready',
+  DISPATCHED: 'Dispatched',
   OUT_FOR_DELIVERY: 'Out for delivery',
   DELIVERED: 'Delivered',
   CANCELLED: 'Cancelled',
@@ -32,14 +33,14 @@ export const needsPayment = (o: Pick<Order, 'status' | 'payment_status'>) => o.s
 /** The happy-path stages for each order type, in order. */
 export function stages(type: OrderType | string): OrderStatus[] {
   return type === 'DELIVERY'
-    ? ['PLACED', 'CONFIRMED', 'PREPARING', 'OUT_FOR_DELIVERY', 'DELIVERED']
-    : ['PLACED', 'CONFIRMED', 'PREPARING', 'READY', 'DELIVERED'];
+    ? ['PLACED', 'CONFIRMED', 'PREPARING', 'READY', 'DISPATCHED', 'OUT_FOR_DELIVERY', 'DELIVERED']
+    : ['PLACED', 'CONFIRMED', 'PREPARING', 'READY', 'DISPATCHED', 'DELIVERED'];
 }
 
 export function statusBadgeClass(status: OrderStatus): string {
   if (isCancelled(status)) return 'badge-crit';
   if (status === 'DELIVERED') return 'badge-good';
-  if (status === 'READY' || status === 'OUT_FOR_DELIVERY') return 'badge-violet';
+  if (status === 'READY' || status === 'DISPATCHED' || status === 'OUT_FOR_DELIVERY') return 'badge-violet';
   return 'badge-accent';
 }
 
@@ -71,6 +72,8 @@ export function statusMessage(o: Pick<Order, 'status' | 'payment_status' | 'orde
       return `${r} is preparing your food.`;
     case 'READY':
       return o.order_type === 'DELIVERY' ? 'Your order is packed and waiting for a driver.' : o.order_type === 'DINE_IN' ? 'Your food is ready and on its way to your table.' : 'Your order is ready to collect.';
+    case 'DISPATCHED':
+      return o.order_type === 'DELIVERY' ? 'Your order has been handed over for delivery.' : o.order_type === 'DINE_IN' ? 'Your food has been sent out to your table.' : 'Your order has been dispatched.';
     case 'OUT_FOR_DELIVERY':
       return 'Your driver has picked up your order and is on the way.';
     case 'DELIVERED':
