@@ -12,7 +12,7 @@ import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/submit-button';
 import { TextField } from '@/components/ui/text-field';
 import { CART_KEY, useCart } from '@/hooks/use-cart';
-import { addressesApi } from '@/lib/api/addresses';
+import { addressesApi, hasPin } from '@/lib/api/addresses';
 import { readAppPrefs } from '@/lib/app-prefs';
 import { cartApi, type Cart, type CheckoutInput, type OrderType } from '@/lib/api/cart';
 import { restaurantsApi, type RestaurantDetail } from '@/lib/api/restaurants';
@@ -155,6 +155,7 @@ export function CheckoutView() {
 
     if (orderType === 'DELIVERY') {
       if (!addressId) next.address = 'Choose or add a delivery address';
+      else if (!hasPin(selectedAddress)) next.address = 'Drop a map pin on this address so the driver can find you. Choose Edit on it.';
       else payload.address_id = addressId;
       if (instructions.trim()) payload.delivery_instructions = instructions.trim();
     } else if (orderType === 'PICKUP') {

@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/submit-button';
 import { useDeliveries, useDelivery } from '@/hooks/use-admin-delivery';
 import { useStaff } from '@/hooks/use-admin-staff';
 import { useNow } from '@/hooks/use-now';
-import { driverLabel, hasPin, isFinished, isOnTheRoad, mapsLinkForAddress, mapsLinkForPin, minutesBetween, pinIsStale, timeline } from '@/lib/delivery';
+import { driverLabel, hasPin, isFinished, isOnTheRoad, hasCustomerPin, mapsLinkForPin, navigateLink, minutesBetween, pinIsStale, timeline } from '@/lib/delivery';
 import { parseError } from '@/lib/errors';
 import { timeAgo } from '@/lib/time-ago';
 
@@ -123,7 +123,7 @@ export function DeliveryDetailView({ id }: { id: string }) {
             <dt>Deliver to</dt>
             <dd>
               {d.delivery_address || '—'}
-              {d.delivery_address && <> · <a className="an-link" href={mapsLinkForAddress(d.delivery_address)} target="_blank" rel="noreferrer noopener">Map ↗</a></>}
+              {navigateLink(d) && <> · <a className="an-link" href={navigateLink(d)!} target="_blank" rel="noreferrer noopener">{hasCustomerPin(d) ? 'Customer pin ↗' : 'Map ↗'}</a></>}
             </dd>
             <dt>Instructions</dt><dd>{d.delivery_instructions || 'None'}</dd>
             <dt>Pick up from</dt><dd>{d.pickup_address || d.restaurant_name || '—'}</dd>

@@ -44,6 +44,8 @@ export interface RestaurantDetail extends RestaurantSummary {
   state: string;
   country: string;
   postal_code: string;
+  latitude?: string | null;
+  longitude?: string | null;
   opening_time: string;
   closing_time: string;
   delivery_fee: string;

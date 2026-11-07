@@ -4,6 +4,8 @@ import { useRef, useState, type ChangeEvent, type FormEvent } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { QueryGate, SaveBar, SettingsFrame, mapSaveError } from './settings-kit';
 import { SafeImage } from '@/components/ui/safe-image';
+import { LocationPicker, type LatLng } from '@/components/customer/location-picker';
+import '@/components/customer/location-picker.css';
 import { TextArea } from '@/components/ui/text-area';
 import { TextField } from '@/components/ui/text-field';
 import { Button } from '@/components/ui/submit-button';
@@ -94,8 +96,11 @@ function DetailsForm({ s }: { s: RestaurantSettings }) {
   const [values, setValues] = useState<Values>(baseline);
   const [errors, setErrors] = useState<Partial<Record<Field, string>>>({});
   const [formError, setFormError] = useState<string | null>(null);
+  const savedPin: LatLng | null = s.latitude && s.longitude ? { lat: Number(s.latitude), lng: Number(s.longitude) } : null;
+  const [pin, setPin] = useState<LatLng | null>(savedPin);
+  const pinChanged = (pin?.lat ?? null) !== (savedPin?.lat ?? null) || (pin?.lng ?? null) !== (savedPin?.lng ?? null);
 
-  const dirty = FIELDS.some((f) => values[f] !== baseline[f]);
+  const dirty = FIELDS.some((f) => values[f] !== baseline[f]) || pinChanged;
   useUnsavedWarning(dirty);
 
   const set = (f: Field) => (e: { target: { value: string } }) => {
@@ -116,6 +121,7 @@ function DetailsForm({ s }: { s: RestaurantSettings }) {
     // Send only what changed.
     const patch: Record<string, string | null> = {};
     for (const f of FIELDS) if (values[f] !== baseline[f]) patch[f] = f === 'description' ? values[f].trim() || null : values[f].trim();
+    if (pinChanged && pin) { patch.latitude = pin.lat.toFixed(6); patch.longitude = pin.lng.toFixed(6); }
     try {
       await save.mutateAsync(patch);
       push('Restaurant details saved');
@@ -165,7 +171,13 @@ function DetailsForm({ s }: { s: RestaurantSettings }) {
           </div>
         </section>
 
-        <SaveBar dirty={dirty} busy={save.isPending} error={formError} onDiscard={() => { setValues(baseline); setErrors({}); setFormError(null); }} />
+        <section className="card ad-card-pad" aria-labelledby="rd-map">
+          <h2 id="rd-map" className="ad-card-title">Location on the map</h2>
+          <p className="ad-note">Drop a pin on your front door. Guests see this map on your restaurant page with a “Get directions” button that opens Google Maps.</p>
+          <LocationPicker value={pin} onChange={setPin} />
+        </section>
+
+        <SaveBar dirty={dirty} busy={save.isPending} error={formError} onDiscard={() => { setValues(baseline); setErrors({}); setFormError(null); setPin(savedPin); }} />
       </form>
     </>
   );

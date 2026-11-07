@@ -9,7 +9,7 @@ import { useAuth } from '@/context/auth-context';
 import { deliveryError, useAdvance, useDeliveries } from '@/hooks/use-admin-delivery';
 import { useNow } from '@/hooks/use-now';
 import { adminDeliveryApi, type AdminDelivery } from '@/lib/api/admin-delivery';
-import { DELIVERY_LABEL, STEP_LABEL, etaText, isFinished, mapsLinkForAddress, nextStep } from '@/lib/delivery';
+import { DELIVERY_LABEL, STEP_LABEL, etaText, isFinished, hasCustomerPin, navigateLink, nextStep } from '@/lib/delivery';
 import { parseError } from '@/lib/errors';
 import { timeAgo } from '@/lib/time-ago';
 
@@ -95,7 +95,7 @@ function StepCard({ d, now }: { d: AdminDelivery; now: number }) {
       </div>
       {d.delivery_instructions && <div className="dr-note">📝 {d.delivery_instructions}</div>}
       <div className="dr-row">
-        {d.delivery_address && <a className="dr-link" href={mapsLinkForAddress(d.delivery_address)} target="_blank" rel="noreferrer noopener">Open in Maps ↗</a>}
+        {navigateLink(d) && <a className="dr-link" href={navigateLink(d)!} target="_blank" rel="noreferrer noopener">{hasCustomerPin(d) ? '🧭 Navigate to customer in Google Maps ↗' : 'Open in Maps ↗'}</a>}
         {d.pickup_address && <span className="dr-sub">Pick up: {d.pickup_address}</span>}
       </div>
       {step && (

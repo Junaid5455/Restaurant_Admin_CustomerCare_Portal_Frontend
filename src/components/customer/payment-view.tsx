@@ -12,6 +12,7 @@ import { StripeCardField, type StripeCardHandle } from './stripe-card';
 import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/submit-button';
 import { useToast } from '@/components/ui/toast';
+import { useAuth } from '@/context/auth-context';
 import { ordersApi } from '@/lib/api/orders';
 import { isCardResult, paymentsApi, type PayMethod } from '@/lib/api/payments';
 import { getSnapshot, saveSnapshot, type CheckoutSnapshot } from '@/lib/checkout-session';
@@ -26,6 +27,8 @@ export function PaymentView({ orderId }: { orderId: string }) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { push } = useToast();
+  const { user } = useAuth();
+  const cardholderName = [user?.first_name, user?.last_name].filter(Boolean).join(' ');
   const cardRef = useRef<StripeCardHandle>(null);
 
   const order = useQuery({ queryKey: ['order', orderId], queryFn: () => ordersApi.get(orderId) });
@@ -67,7 +70,7 @@ export function PaymentView({ orderId }: { orderId: string }) {
       </div>
     );
   }
-  if (order.isError || !o) {
+  if (!o) {
     const err = order.error ? parseError(order.error) : null;
     return (
       <div className="sv-state">
@@ -177,8 +180,7 @@ export function PaymentView({ orderId }: { orderId: string }) {
               <div className="sv-card-box">
                 {liveStripe ? (
                   <>
-                    <label className="field-label" style={{ display: 'block', marginBottom: 6 }}>Card details</label>
-                    <StripeCardField publishableKey={STRIPE_KEY} handleRef={cardRef} disabled={paying} />
+                    <StripeCardField publishableKey={STRIPE_KEY} handleRef={cardRef} disabled={paying} defaultName={cardholderName} />
                     <p className="field-hint" style={{ marginTop: 8 }}>Your card details go straight to Stripe. Savoria never sees them.</p>
                   </>
                 ) : (

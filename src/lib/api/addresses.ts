@@ -16,7 +16,13 @@ export interface SavedAddress {
 
 export type AddressInput = Pick<SavedAddress, 'label' | 'address' | 'city' | 'state' | 'country' | 'postal_code'> & {
   is_default: boolean;
+  /** The pin the guest dropped on the map (decimal degrees, 6 places). */
+  latitude?: string | null;
+  longitude?: string | null;
 };
+
+/** An address with no map pin can't be found by the driver. */
+export const hasPin = (a: Pick<SavedAddress, 'latitude' | 'longitude'> | undefined | null) => !!a && a.latitude != null && a.longitude != null && a.latitude !== '' && a.longitude !== '';
 
 type Maybe<T> = T[] | { results: T[] };
 

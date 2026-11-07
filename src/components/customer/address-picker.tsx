@@ -7,7 +7,9 @@ import { Alert } from '@/components/ui/alert';
 import { Modal } from '@/components/ui/modal';
 import { Button } from '@/components/ui/submit-button';
 import { TextField } from '@/components/ui/text-field';
-import { addressesApi, type AddressInput, type SavedAddress } from '@/lib/api/addresses';
+import { LocationPicker, type LatLng } from './location-picker';
+import './location-picker.css';
+import { addressesApi, hasPin, type AddressInput, type SavedAddress } from '@/lib/api/addresses';
 import { ApiError, parseError } from '@/lib/errors';
 
 export const ADDRESSES_KEY = ['addresses'] as const;
@@ -38,6 +40,7 @@ export function AddressFormModal({
       ? { label: initial.label, address: initial.address, city: initial.city, state: initial.state, country: initial.country, postal_code: initial.postal_code, is_default: initial.is_default }
       : { ...EMPTY, is_default: isFirst },
   );
+  const [pin, setPin] = useState<LatLng | null>(initial && hasPin(initial) ? { lat: Number(initial.latitude), lng: Number(initial.longitude) } : null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -55,13 +58,15 @@ export function AddressFormModal({
     if (!trimmed.state) next.state = 'Enter the state or province';
     if (!trimmed.country) next.country = 'Enter the country';
     if (!trimmed.postal_code) next.postal_code = 'Enter the postal code';
+    if (!pin) next.pin = 'Drop a pin on the map so the driver can find you';
     setErrors(next);
     setFormError(null);
     if (Object.keys(next).length) return;
 
     setBusy(true);
     try {
-      const saved = initial ? await addressesApi.update(initial.id, trimmed) : await addressesApi.create(trimmed);
+      const withPin = { ...trimmed, latitude: pin!.lat.toFixed(6), longitude: pin!.lng.toFixed(6) };
+      const saved = initial ? await addressesApi.update(initial.id, withPin) : await addressesApi.create(withPin);
       await queryClient.invalidateQueries({ queryKey: ADDRESSES_KEY });
       onSaved(saved);
     } catch (err) {
@@ -88,6 +93,10 @@ export function AddressFormModal({
             <div className="sv-two">
               <TextField label="Country" value={values.country} onChange={set('country')} error={errors.country} autoComplete="country-name" />
               <TextField label="Postal code" maxLength={10} value={values.postal_code} onChange={set('postal_code')} error={errors.postal_code} autoComplete="postal-code" />
+            </div>
+            <div>
+              <strong style={{ fontSize: 14 }}>Where should we deliver?</strong>
+              <LocationPicker value={pin} onChange={(p) => { setPin(p); setErrors((x) => ({ ...x, pin: '' })); }} error={errors.pin} />
             </div>
             <label className="sv-check">
               <input type="checkbox" checked={values.is_default} onChange={(e) => setValues((v) => ({ ...v, is_default: e.target.checked }))} />
@@ -178,6 +187,7 @@ export function AddressPicker({
                     {a.is_default && <span className="badge badge-accent">Default</span>}
                   </span>
                   <span className="text">{formatAddress(a)}</span>
+                  {!hasPin(a) && <span className="text" style={{ color: 'var(--crit)', fontWeight: 700 }}>No map pin yet. Edit this address to drop one.</span>}
                 </span>
               </label>
               <div className="actions">

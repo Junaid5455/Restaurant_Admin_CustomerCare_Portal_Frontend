@@ -20,6 +20,9 @@ export interface RestaurantSettings {
   state: string;
   country: string;
   postal_code: string;
+  /** The restaurant's spot on the map (decimal strings), or null until the owner drops a pin. */
+  latitude: string | null;
+  longitude: string | null;
   /** "HH:MM:SS" */
   opening_time: string;
   closing_time: string;

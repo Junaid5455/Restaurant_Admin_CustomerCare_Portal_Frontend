@@ -1,5 +1,6 @@
 'use client';
 
+import { RestaurantMap } from './restaurant-map';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -142,6 +143,15 @@ export function RestaurantDetail({ id }: { id: string }) {
               </Fact>
             )}
           </dl>
+
+          {Number.isFinite(Number(r.latitude)) && Number.isFinite(Number(r.longitude)) && r.latitude != null && r.longitude != null && r.latitude !== '' && (
+            <RestaurantMap lat={Number(r.latitude)} lng={Number(r.longitude)} name={r.name} address={address} />
+          )}
+          {!(r.latitude != null && r.longitude != null && r.latitude !== '') && address && (
+            <p style={{ marginTop: 12 }}>
+              <a className="btn btn-ghost" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`} target="_blank" rel="noreferrer noopener">🧭 Find on Google Maps ↗</a>
+            </p>
+          )}
 
           {zones.length > 0 && (
             <details className="sv-zones">

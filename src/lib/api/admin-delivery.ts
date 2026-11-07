@@ -21,6 +21,9 @@ export interface AdminDelivery {
   status: DeliveryStatus;
   pickup_address?: string | null;
   delivery_address?: string | null;
+  /** The pin the customer dropped on the map when ordering (decimal strings). */
+  delivery_latitude?: string | null;
+  delivery_longitude?: string | null;
   delivery_instructions?: string | null;
   estimated_delivery_time_minutes: number | null;
   actual_delivery_time_minutes: number | null;

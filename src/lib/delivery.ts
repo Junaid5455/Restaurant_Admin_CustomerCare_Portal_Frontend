@@ -77,6 +77,12 @@ export const pinIsStale = (d: AdminDelivery, now: number) => {
 };
 
 export const mapsLinkForPin = (d: Pick<AdminDelivery, 'current_latitude' | 'current_longitude'>) => `https://www.openstreetmap.org/?mlat=${d.current_latitude}&mlon=${d.current_longitude}#map=16/${d.current_latitude}/${d.current_longitude}`;
+/** Google Maps turn-by-turn directions to the customer's pin (falls back to a search on the written address). */
+export const navigateLink = (d: Pick<AdminDelivery, 'delivery_latitude' | 'delivery_longitude' | 'delivery_address'>): string | null => {
+  if (d.delivery_latitude && d.delivery_longitude) return `https://www.google.com/maps/dir/?api=1&destination=${d.delivery_latitude},${d.delivery_longitude}&travelmode=driving`;
+  return d.delivery_address ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.delivery_address)}` : null;
+};
+export const hasCustomerPin = (d: Pick<AdminDelivery, 'delivery_latitude' | 'delivery_longitude'>) => !!d.delivery_latitude && !!d.delivery_longitude;
 export const mapsLinkForAddress = (address: string) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
 
 /** The active drivers an owner can pick from. */
